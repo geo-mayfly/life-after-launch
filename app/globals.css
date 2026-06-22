@@ -1,0 +1,221 @@
+@import "../styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Font bridge — self-hosted next/font sits IN FRONT of the token
+   stacks so tokens.css stays the untouched drop-in source of truth.
+------------------------------------------------------------------ */
+:root {
+  --font-display: var(--font-display-next), "DM Serif Display", Georgia, serif;
+  --font-sans: var(--font-sans-next), "Hanken Grotesk", "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------ */
+@layer base {
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--t-body);
+    line-height: 1.6;
+    font-feature-settings: "kern", "liga";
+  }
+
+  ::selection {
+    background: var(--marigold);
+    color: var(--ink-navy);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+
+  /* Visible, on-brand focus. Marigold on dark surfaces, deep-blue on light. */
+  :focus-visible {
+    outline: 3px solid var(--marigold);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  .on-light :focus-visible,
+  [data-surface="light"] :focus-visible {
+    outline-color: var(--deep-blue);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Reading measure for long-form prose on Bone. */
+  .prose-bone {
+    max-width: 68ch;
+    color: var(--ink);
+    font-size: var(--t-body);
+    line-height: 1.7;
+  }
+  .prose-bone p {
+    margin-bottom: 1.1em;
+  }
+  .prose-bone a {
+    color: var(--deep-blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Brand utilities
+------------------------------------------------------------------ */
+@layer components {
+  /* The marigold "spark" — a left-to-right underline drawn on hover.
+     The signature micro-interaction. */
+  .spark-link {
+    position: relative;
+    display: inline-block;
+  }
+  .spark-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    background: var(--marigold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease);
+  }
+  .spark-link:hover::after,
+  .spark-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Eyebrow / kicker — grotesk caps, wide tracking. Never marigold. */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--t-small);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* The pointer "drag" affordance over explore canvases (desktop). */
+  .drag-cursor {
+    cursor: grab;
+  }
+  .drag-cursor:active {
+    cursor: grabbing;
+  }
+
+  /* Hide scrollbars on drag rails while keeping native scroll. */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Skeleton — blue field with a soft bone shimmer sweep. CLS-safe. */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--deep-blue);
+    border-radius: var(--r-md);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(246, 242, 233, 0.18),
+      transparent
+    );
+    animation: shimmer 1.6s var(--ease) infinite;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Keyframes
+------------------------------------------------------------------ */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes cloud-drift {
+  0%,
+  100% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ------------------------------------------------------------------
+   View Transitions — the poster→page morph (brief §4.3/§4.4c).
+   The clicked poster and the destination hero share a view-transition-name
+   (poster-<slug>); the browser morphs one into the other at scene pace.
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) {
+    animation-duration: var(--dur-scene);
+    animation-timing-function: var(--ease);
+  }
+  /* The full-page crossfade is quick; only the shared element takes its time. */
+  ::view-transition-group(root) {
+    animation-duration: var(--dur);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion — belt and braces on top of the token-level overrides.
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .skeleton::after {
+    display: none;
+  }
+}

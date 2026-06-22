@@ -1,0 +1,79 @@
+/* ============================================================
+   LIFE AFTER LAUNCH — design tokens (colors_and_type.css)
+   Aussie Founders Club podcast · lifeafterlaunchpod.com
+   ------------------------------------------------------------
+   One import gives you every token below.
+   Reference var(--token) everywhere — never hard-code values.
+   Load fonts: DM Serif Display + Hanken Grotesk (Google Fonts).
+   ============================================================ */
+
+:root {
+  /* ---- Brand core ---- */
+  --launch-blue: #0089F5;   --launch-blue-bright: #19A0FF;
+  --deep-blue: #0061C4;     --ink-navy: #062A52;
+  --marigold: #F7B01F;      --marigold-bright: #FFC53D;  --marigold-deep: #E0930A;
+
+  /* ---- Neutrals (warm-leaning, functional only) ---- */
+  --paper: #FFFFFF;  --bone: #F6F2E9;  --bone-deep: #ECE6D8;
+  --ink: #15171C;    --ink-2: #4A4E57; --ink-3: #80848E;
+  --hairline: rgba(21,23,28,.10);
+
+  /* ---- On-blue text (opacity tiers, not new greys) ---- */
+  --on-blue: #FFFFFF;
+  --on-blue-soft: rgba(255,255,255,.74);
+  --on-blue-faint: rgba(255,255,255,.42);
+
+  /* ---- Semantic roles + status ---- */
+  --text: var(--ink);
+  --surface: var(--paper);
+  --accent: var(--marigold);
+  --link: var(--deep-blue);
+  --positive: #1E9E6A;
+  --danger: #D8442F;
+
+  /* ---- Type families ---- */
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Fluid type scale (clamp: min, preferred, max) ---- */
+  --t-hero: clamp(3.25rem, 7vw, 6rem);   /* poster headline / wordmark */
+  --t-h1:   clamp(2.5rem, 4.5vw, 4rem);
+  --t-h2:   clamp(1.9rem, 3vw, 2.75rem);
+  --t-h3:   clamp(1.4rem, 2vw, 1.85rem);
+  --t-lead: clamp(1.15rem, 1.5vw, 1.4rem);
+  --t-body: 1.0625rem;   /* 17px — fixed, readable */
+  --t-small:0.9375rem;   /* 15px */
+  /* line-height: display tight ~0.95–1.06, body generous 1.6 */
+
+  /* ---- Spacing — 8pt rhythm ---- */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
+
+  /* ---- Corner radii — soft, never bubbly ---- */
+  --r-xs:6px;   /* inputs, small chips */
+  --r-md:16px;  /* cards and panels */
+  --r-lg:24px;  /* hero & media tiles */
+
+  /* ---- Elevation — cool, navy-tinted, soft ---- */
+  --shadow-sm: 0 1px 2px rgba(6,42,82,.06), 0 4px 16px rgba(6,42,82,.08);
+  --shadow-lg: 0 8px 24px rgba(6,42,82,.12), 0 24px 60px rgba(6,42,82,.16);
+  --shadow-gold: 0 6px 20px rgba(247,176,31,.35);  /* under marigold CTAs only */
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --ease-pop: cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:140ms;   /* press & state changes */
+  --dur:240ms;        /* default — hovers, entrances */
+  --dur-slow:420ms;   /* image scale, larger moves */
+  --dur-scene:720ms;  /* set-pieces only — poster→page morph */
+
+  /* ---- Layout ---- */
+  --content-max: 1180px;  /* centred reading column */
+  --wall-max: 1320px;     /* set-piece bleed */
+}
+
+/* Always honour reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast:0ms; --dur:0ms; --dur-slow:0ms; --dur-scene:120ms; }
+  * { scroll-behavior: auto !important; }
+}
