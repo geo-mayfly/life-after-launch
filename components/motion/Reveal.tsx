@@ -1,90 +1,126 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
-import { reveal, staggerContainer, inViewOnce, ease, dur } from "@/lib/motion";
+import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Tier-1 in-view reveal (brief §4.2) — soft fade + small rise, once at ~12%.
- * The workhorse animation across every page. Honours reduced motion.
+ * Tier-1 in-view reveal (brief §4.2) — soft fade + small rise.
+ *
+ * Robustness first: content ships VISIBLE (the JSX renders with no hidden
+ * styles, so SSR / no-JS / crawlers always see it). On the client we only
+ * HIDE elements that are currently BELOW the fold, then reveal them as they
+ * scroll in. Above-the-fold content is never touched — no "empty void on
+ * load", no flash. Reduced motion leaves everything visible.
  */
 
-type Tag = "div" | "ol" | "ul" | "li" | "span" | "p" | "section" | "article";
+type Tag = "div" | "ol" | "ul" | "li" | "span" | "p" | "section" | "article" | "figure";
 
-const MOTION = {
-  div: motion.div,
-  ol: motion.ol,
-  ul: motion.ul,
-  li: motion.li,
-  span: motion.span,
-  p: motion.p,
-  section: motion.section,
-  article: motion.article,
-} as const;
+const FOLD = 0.92; // treat anything starting above 92% of the viewport as "in view"
 
-type RevealProps = {
+function prefersReduced() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+export function Reveal({
+  children,
+  as: Tag = "div",
+  delay = 0,
+  className,
+  ...rest
+}: {
   children: ReactNode;
   as?: Tag;
   delay?: number;
   className?: string;
-  // Allow data-* and aria-* passthrough on the wrapper.
-  [key: `data-${string}`]: string | undefined;
-};
+} & Record<`data-${string}`, string | undefined>) {
+  const ref = useRef<HTMLElement>(null);
 
-export function Reveal({ children, as = "div", delay = 0, className, ...rest }: RevealProps) {
-  const reduced = useReducedMotion();
-  const Comp = MOTION[as];
-  const Plain = as;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReduced()) return;
 
-  if (reduced) {
-    return (
-      <Plain className={className} {...rest}>
-        {children}
-      </Plain>
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * FOLD) return; // already in view → stay visible
+
+    el.style.setProperty("--reveal-delay", `${delay}s`);
+    el.dataset.reveal = "armed";
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.dataset.reveal = "in";
+          io.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
-  }
+    io.observe(el);
+    return () => io.disconnect();
+  }, [delay]);
 
+  const Comp = Tag as "div";
   return (
-    <Comp
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={inViewOnce}
-      variants={{
-        hidden: reveal.hidden,
-        show: { opacity: 1, y: 0, transition: { duration: dur.slow, ease, delay } },
-      }}
-      {...rest}
-    >
+    <Comp ref={ref as React.Ref<HTMLDivElement>} className={className} {...rest}>
       {children}
     </Comp>
   );
 }
 
-/** Container that staggers child <RevealItem>s. */
+/**
+ * Stagger — reveals direct <RevealItem> children in sequence. Same rules:
+ * visible at rest; only hidden+revealed when the group is below the fold.
+ */
 export function Stagger({
   children,
+  as: Tag = "div",
   className,
   stagger = 0.07,
-  as = "div",
 }: {
   children: ReactNode;
+  as?: Tag;
   className?: string;
   stagger?: number;
-  as?: Tag;
 }) {
-  const reduced = useReducedMotion();
-  const Comp = MOTION[as];
-  const Plain = as;
-  if (reduced) return <Plain className={className}>{children}</Plain>;
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const items = Array.from(
+      el.querySelectorAll<HTMLElement>(":scope > [data-reveal-item]"),
+    );
+    if (!items.length || prefersReduced()) return;
+
+    const playIn = () =>
+      items.forEach((it, i) => {
+        it.style.transitionDelay = `${i * stagger}s`;
+        it.dataset.revealItem = "in";
+      });
+
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * FOLD) {
+      playIn(); // in view at load → already visible; keep them visible
+      return;
+    }
+
+    items.forEach((it) => (it.dataset.revealItem = "armed"));
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          playIn();
+          io.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [stagger]);
+
+  const Comp = Tag as "div";
   return (
-    <Comp
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={inViewOnce}
-      variants={staggerContainer(stagger)}
-    >
+    <Comp ref={ref as React.Ref<HTMLDivElement>} className={className}>
       {children}
     </Comp>
   );
@@ -92,19 +128,17 @@ export function Stagger({
 
 export function RevealItem({
   children,
+  as: Tag = "div",
   className,
-  as = "div",
 }: {
   children: ReactNode;
-  className?: string;
   as?: Tag;
+  className?: string;
 }) {
-  const reduced = useReducedMotion();
-  const Comp = MOTION[as];
-  const Plain = as;
-  if (reduced) return <Plain className={className}>{children}</Plain>;
+  const Comp = Tag as "div";
+  // data-reveal-item present (empty) at rest = visible; Stagger toggles it.
   return (
-    <Comp className={className} variants={reveal}>
+    <Comp className={className} data-reveal-item="">
       {children}
     </Comp>
   );

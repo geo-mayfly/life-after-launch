@@ -74,7 +74,7 @@ export default async function EpisodePage({
       <EpisodeHero episode={episode} />
 
       {/* Overview — long, on-voice description on Bone paper. */}
-      <section className="bg-bone py-sp-9" aria-labelledby="overview-heading">
+      <section className="paper-grain bg-bone py-sp-9" aria-labelledby="overview-heading">
         <div className="mx-auto max-w-content px-5 sm:px-8">
           <Reveal>
             <h2 id="overview-heading" className="eyebrow text-deep-blue">

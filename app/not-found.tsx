@@ -18,7 +18,7 @@ export default function NotFound() {
         <h1 className="mt-3 max-w-xl font-display text-h1 leading-tight text-on-blue">
           Nothing here yet. The fog hasn&rsquo;t cleared on this one.
         </h1>
-        <p className="mt-5 text-on-blue-soft">
+        <p className="mt-5 text-on-blue">
           The page you&rsquo;re after has drifted off. Let&rsquo;s get you back.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-5">

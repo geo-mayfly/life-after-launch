@@ -6,14 +6,14 @@ import CloudHead from "@/components/brand/CloudHead";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Pill from "@/components/ui/Pill";
 import ListenButtons from "@/components/episode/ListenButtons";
+import EpisodeCover from "@/components/episode/EpisodeCover";
 
 /**
- * EpisodeHero (brief §6.3) — receives the poster→page morph (shared
- * view-transition-name = the slug). Tone-tinted wall, breadcrumb, eyebrow,
- * editorial title, guest line, primary Listen link-outs, runtime.
+ * EpisodeHero (brief §6.3) — receives the poster→page morph. The collage cover
+ * on the right carries the shared view-transition-name (the slug) and fills
+ * what used to be an empty column. Reading-critical copy is full-opacity white.
  */
 export default function EpisodeHero({ episode }: { episode: Episode }) {
-  // e.g. "Dana Whitlock — Co-founder, Saltbush"
   const roleCompany = [episode.guestRole, episode.guestCompany]
     .filter(Boolean)
     .join(", ");
@@ -22,59 +22,54 @@ export default function EpisodeHero({ episode }: { episode: Episode }) {
     : [episode.guestName, roleCompany].filter(Boolean).join(" — ");
 
   return (
-    <BlueWall
-      tone={episode.tone}
-      as="header"
-      className="pb-sp-9 pt-[120px]"
-      style={{ viewTransitionName: `poster-${episode.slug}` }}
-      vignette={0.5}
-    >
+    <BlueWall tone={episode.tone} as="header" className="pb-sp-9 pt-[120px]" vignette={0.5}>
       <div className="mx-auto max-w-content px-5 sm:px-8">
         {/* Breadcrumb (also emitted as BreadcrumbList schema by the page). */}
         <nav aria-label="Breadcrumb" className="mb-7">
-          <ol className="flex flex-wrap items-center gap-2 text-small text-on-blue-faint">
+          <ol className="flex flex-wrap items-center gap-2 text-small text-on-blue-soft">
             <li>
-              <Link href="/" className="spark-link hover:text-on-blue-soft">
+              <Link href="/" className="spark-link hover:text-on-blue">
                 Home
               </Link>
             </li>
             <li aria-hidden>›</li>
             <li>
-              <Link href="/episodes" className="spark-link hover:text-on-blue-soft">
+              <Link href="/episodes" className="spark-link hover:text-on-blue">
                 Episodes
               </Link>
             </li>
             <li aria-hidden>›</li>
-            <li className="text-on-blue-soft">{episode.episodeTitle}</li>
+            <li className="text-on-blue">{episode.episodeTitle}</li>
           </ol>
         </nav>
 
-        <Eyebrow on="dark">{episodeEyebrow(episode)}</Eyebrow>
-
-        <div className="mt-4 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+        <div className="grid items-center gap-10 md:grid-cols-[1.25fr_0.75fr]">
           <div>
-            <h1 className="max-w-3xl font-display text-h1 leading-[1.02] text-on-blue">
+            <Eyebrow on="dark">{episodeEyebrow(episode)}</Eyebrow>
+            <h1 className="mt-4 max-w-3xl font-display text-h1 leading-[1.02] text-on-blue">
               {episode.episodeTitle}
             </h1>
-            <p className="mt-5 flex items-center gap-3 text-lead text-on-blue-soft">
-              {episode.anonymous && (
-                <CloudHead size={40} color="var(--on-blue-soft)" />
-              )}
+            <p className="mt-5 flex items-center gap-3 text-lead text-on-blue">
+              {episode.anonymous && <CloudHead size={40} color="var(--on-blue)" />}
               {guest}
             </p>
-            <p className="mt-5 max-w-2xl text-on-blue-soft">{episode.hook}</p>
+            <p className="mt-5 max-w-2xl text-lead text-on-blue">{episode.hook}</p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <ListenButtons listen={episode.listen} />
+              <Pill on="dark">{episode.duration}</Pill>
+            </div>
           </div>
 
-          {episode.anonymous && (
-            <div className="hidden md:block" aria-hidden>
-              <CloudHead size={150} color="var(--on-blue-soft)" drift />
+          {/* The collage cover — morph target, fills the column. */}
+          <div className="mx-auto w-full max-w-[360px] md:max-w-none">
+            <div
+              className="aspect-[4/5] overflow-hidden rounded-lg shadow-lg"
+              style={{ viewTransitionName: `poster-${episode.slug}` }}
+            >
+              <EpisodeCover episode={episode} caption={false} />
             </div>
-          )}
-        </div>
-
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <ListenButtons listen={episode.listen} />
-          <Pill on="dark">{episode.duration}</Pill>
+          </div>
         </div>
       </div>
     </BlueWall>

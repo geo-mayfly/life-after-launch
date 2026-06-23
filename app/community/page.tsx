@@ -61,7 +61,7 @@ export default function CommunityPage() {
             <p className="mt-6 font-display text-h2 text-marigold">
               <StatCounter value={site.memberCount} /> Founders and counting.
             </p>
-            <p className="mt-5 max-w-xl text-lead text-on-blue-soft">
+            <p className="mt-5 max-w-xl text-lead text-on-blue">
               The Slack where the conversation keeps going after the episode
               ends. Real founders, real talk, no pitch decks.
             </p>
@@ -153,7 +153,7 @@ export default function CommunityPage() {
               {memberCountLabel} Founders are already in there. You&rsquo;ll be
               one of them.
             </p>
-            <p className="mt-6 text-small text-on-blue-soft">
+            <p className="mt-6 text-small text-on-blue">
               Hit follow, go hard on the five stars, and we&rsquo;ll see ya in
               the Slack. See ya!
             </p>

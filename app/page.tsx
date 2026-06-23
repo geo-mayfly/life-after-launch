@@ -12,6 +12,7 @@ import StatCounter from "@/components/ui/StatCounter";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import Marquee from "@/components/motion/Marquee";
+import TestimonialCard from "@/components/layout/TestimonialCard";
 import HomeHero from "@/components/home/HomeHero";
 import EpisodeWall from "@/components/episode/EpisodeWall";
 import EmailSignup from "@/components/layout/EmailSignup";
@@ -46,7 +47,7 @@ export default function HomePage() {
       </BlueWall>
 
       {/* 3 — What the show is: Bone band, off-centre, lots of air. */}
-      <section className="bg-bone py-sp-9" aria-labelledby="show-heading">
+      <section className="paper-grain bg-bone py-sp-9" aria-labelledby="show-heading">
         <div className="mx-auto grid max-w-content gap-8 px-5 sm:px-8 md:grid-cols-[1.3fr_1fr] md:items-end">
           <Reveal>
             <h2
@@ -82,7 +83,7 @@ export default function HomePage() {
               </span>{" "}
               in the Slack.
             </p>
-            <p className="mt-4 max-w-xl text-on-blue-soft">
+            <p className="mt-4 max-w-xl text-on-blue">
               The {site.club} is where the conversation keeps going — real
               founders, real talk, no LinkedIn voice.
             </p>
@@ -102,21 +103,7 @@ export default function HomePage() {
             <span id="love-heading">FROM THE FOUNDERS</span>
           </Eyebrow>
         </div>
-        <Marquee
-          items={testimonials.map((t, i) => (
-            <figure
-              key={i}
-              className="w-[340px] rounded-md bg-paper p-7 shadow-sm"
-            >
-              <blockquote className="font-display text-h3 italic leading-snug text-ink">
-                &ldquo;{t.quote}&rdquo;
-              </blockquote>
-              <figcaption className="mt-4 text-small text-ink-3">
-                {t.name} · {t.role}
-              </figcaption>
-            </figure>
-          ))}
-        />
+        <Marquee items={testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)} />
       </section>
 
       {/* 6 — Email module. */}

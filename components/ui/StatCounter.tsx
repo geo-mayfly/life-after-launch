@@ -3,15 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * StatCounter (brief §10.3) — the FINAL number renders as real text server-side
- * (so screen-reader / no-JS / crawler users always get the meaningful value).
- * The count-up is a purely visual enhancement layered over it: runs once on
- * first view, skipped (final value shown) under reduced motion. aria-live off.
+ * StatCounter (brief §10.3) — the FINAL number is the source of truth and is
+ * rendered as real text server-side (screen-reader / no-JS / crawler safe and
+ * consistent across every page).
+ *
+ * The count-up is a purely visual enhancement, and ONLY plays for counters
+ * that start below the fold and are then scrolled into view. Counters already
+ * on screen at load show their final value immediately — so a hero counter is
+ * never caught mid-animation showing a wrong/partial number. Reduced motion
+ * shows the final value. aria-live off.
  */
 
 type Props = {
   value: number;
-  /** Prefix/suffix rendered verbatim, e.g. suffix "x" → "5x". */
   prefix?: string;
   suffix?: string;
   className?: string;
@@ -27,40 +31,44 @@ export default function StatCounter({
   prefix = "",
   suffix = "",
   className = "",
-  durationMs = 1200,
+  durationMs = 1100,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  // Initial render = the real final value (SSR + no-JS safe).
-  const [display, setDisplay] = useState(value);
-  const done = useRef(false);
+  const [display, setDisplay] = useState(value); // final value at rest
+  const started = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || done.current) return;
+    if (!el || started.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return; // leave the final value in place
+    // Already on screen at load → keep the final value (no on-load count-up).
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92) return;
+
+    const run = () => {
+      started.current = true;
+      const start = performance.now();
+      setDisplay(0);
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / durationMs);
+        const eased = 1 - Math.pow(1 - t, 3);
+        if (t < 1) {
+          setDisplay(value * eased);
+          requestAnimationFrame(tick);
+        } else {
+          setDisplay(value); // always settle on the true value
+        }
+      };
+      requestAnimationFrame(tick);
+    };
 
     const io = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting || done.current) return;
-        done.current = true;
-        io.disconnect();
-
-        const start = performance.now();
-        setDisplay(0);
-        const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / durationMs);
-          // ease-out
-          const eased = 1 - Math.pow(1 - t, 3);
-          setDisplay(value * eased);
-          if (t < 1) requestAnimationFrame(tick);
-          else setDisplay(value);
-        };
-        requestAnimationFrame(tick);
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          io.disconnect();
+          run();
+        }
       },
       { threshold: 0.5 },
     );
@@ -69,11 +77,7 @@ export default function StatCounter({
   }, [value, durationMs]);
 
   return (
-    <span
-      ref={ref}
-      className={className}
-      style={{ fontVariantNumeric: "tabular-nums" }}
-    >
+    <span ref={ref} className={className} style={{ fontVariantNumeric: "tabular-nums" }}>
       {prefix}
       {format(display)}
       {suffix}

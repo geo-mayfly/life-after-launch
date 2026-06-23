@@ -20,7 +20,7 @@ export default function SlackBlock() {
               <p className="font-display text-h3 text-on-blue">
                 Finished an episode? The conversation keeps going.
               </p>
-              <p className="mt-3 text-on-blue-soft">
+              <p className="mt-3 text-on-blue">
                 Join {memberCountLabel} Founders in the Slack — real founders,
                 real talk, no LinkedIn voice.
               </p>

@@ -7,10 +7,12 @@ import { buildMetadata } from "@/lib/seo";
 import { aboutPageSchema, podcastSeriesSchema, breadcrumbSchema } from "@/lib/schema";
 import JsonLd from "@/components/JsonLd";
 import BlueWall from "@/components/brand/BlueWall";
+import GuestPortrait from "@/components/brand/GuestPortrait";
 import Eyebrow from "@/components/ui/Eyebrow";
 import StatCounter from "@/components/ui/StatCounter";
 import { Reveal, Stagger, RevealItem } from "@/components/motion/Reveal";
 import Marquee from "@/components/motion/Marquee";
+import TestimonialCard from "@/components/layout/TestimonialCard";
 import EmailSignup from "@/components/layout/EmailSignup";
 import SlackBlock from "@/components/layout/SlackBlock";
 
@@ -21,21 +23,16 @@ export const metadata: Metadata = buildMetadata({
   path: "/about",
 });
 
-function HostPortrait({ name }: { name: string }) {
-  const initials = name
-    .split(" ")
-    .map((w) => w[0])
-    .join("");
+function HostPortrait({ name, tone }: { name: string; tone: "deep" | "navy" }) {
+  // Collage placeholder — bust silhouette, NO cloud (the cloud is guests-only).
+  // TODO(owner §12.4): swap for real host photography.
   return (
-    <BlueWall
-      tone="deep"
-      className="flex aspect-[4/5] w-full items-center justify-center rounded-lg shadow-sm"
-      vignette={0.45}
-    >
-      <span className="font-display text-hero text-marigold opacity-90">
-        {initials}
+    <div className="relative">
+      <GuestPortrait tone={tone} withCloud={false} className="aspect-[4/5] w-full rounded-lg" />
+      <span className="absolute bottom-3 left-3 rounded-full bg-paper px-3 py-1 text-[0.72rem] font-semibold text-ink shadow-sm">
+        {name}
       </span>
-    </BlueWall>
+    </div>
   );
 }
 
@@ -61,7 +58,7 @@ export default function AboutPage() {
             <h1 className="mt-4 max-w-3xl font-display text-h1 leading-[1.02] text-on-blue">
               The un-sugar-coated story of building.
             </h1>
-            <p className="mt-6 text-lead text-on-blue-soft">
+            <p className="mt-6 text-lead text-on-blue">
               New in {site.launchedYear} ·{" "}
               <span className="text-on-blue">
                 <StatCounter value={episodeCount} /> episodes
@@ -77,7 +74,7 @@ export default function AboutPage() {
       </BlueWall>
 
       {/* The show — long-form prose */}
-      <section className="bg-bone py-sp-9">
+      <section className="paper-grain bg-bone py-sp-9">
         <div className="mx-auto max-w-content px-5 sm:px-8">
           <Reveal>
             <Eyebrow>THE SHOW</Eyebrow>
@@ -123,7 +120,7 @@ export default function AboutPage() {
                 }`}
               >
                 <div className="max-w-[280px]">
-                  <HostPortrait name={host.name} />
+                  <HostPortrait name={host.name} tone={i % 2 === 0 ? "deep" : "navy"} />
                 </div>
                 <div>
                   <p className="eyebrow text-deep-blue">{host.role}</p>
@@ -163,7 +160,7 @@ export default function AboutPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
-            <p className="text-lead text-on-blue-soft">
+            <p className="text-lead text-on-blue">
               One Founder. One honest conversation. We open on the moment it
               nearly fell apart, then walk it back to the start and forward to
               what they&rsquo;d tell you now. Forty minutes to an hour, no fluff.
@@ -198,18 +195,7 @@ export default function AboutPage() {
         <div className="mx-auto mb-8 max-w-wall px-5 sm:px-8">
           <Eyebrow as="div">FROM THE FOUNDERS</Eyebrow>
         </div>
-        <Marquee
-          items={testimonials.map((t, i) => (
-            <figure key={i} className="w-[340px] rounded-md bg-paper p-7 shadow-sm">
-              <blockquote className="font-display text-h3 italic leading-snug text-ink">
-                &ldquo;{t.quote}&rdquo;
-              </blockquote>
-              <figcaption className="mt-4 text-small text-ink-3">
-                {t.name} · {t.role}
-              </figcaption>
-            </figure>
-          ))}
-        />
+        <Marquee items={testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)} />
       </section>
 
       <section className="bg-bone pb-sp-9">

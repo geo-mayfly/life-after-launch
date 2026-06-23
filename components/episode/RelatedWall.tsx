@@ -9,10 +9,10 @@ import { Stagger, RevealItem } from "@/components/motion/Reveal";
 export default function RelatedWall({ episodes }: { episodes: Episode[] }) {
   if (!episodes.length) return null;
   return (
-    <Stagger className="grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-3">
+    <Stagger className="grid grid-cols-2 gap-6 lg:grid-cols-3">
       {episodes.map((e) => (
-        <RevealItem key={e.slug} className="flex justify-center">
-          <EpisodePoster episode={e} width={320} />
+        <RevealItem key={e.slug}>
+          <EpisodePoster episode={e} />
         </RevealItem>
       ))}
     </Stagger>

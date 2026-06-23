@@ -20,7 +20,7 @@ export default function KeyTakeaways({ episode }: { episode: Episode }) {
 
   return (
     <article className="mx-auto max-w-content px-5 sm:px-8" id="key-takeaways">
-      <div className="rounded-lg bg-bone p-7 sm:p-12" data-surface="light">
+      <div className="paper-grain rounded-lg bg-bone p-7 sm:p-12" data-surface="light">
         <Reveal>
           <Eyebrow>KEY TAKEAWAYS</Eyebrow>
           {/* Question-led H2 — matches a real founder query (SEO long-tail + GEO). */}

@@ -40,7 +40,7 @@ export default function EpisodesPage() {
             <h1 className="mt-4 max-w-3xl font-display text-h1 leading-[1.02] text-on-blue">
               Every Founder has a story.
             </h1>
-            <p className="mt-5 max-w-2xl text-lead text-on-blue-soft">
+            <p className="mt-5 max-w-2xl text-lead text-on-blue">
               The raw ones, the messy ones, the ones that actually worked. Drag
               through and pick your poison.
             </p>

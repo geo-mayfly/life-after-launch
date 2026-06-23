@@ -23,8 +23,8 @@ import EpisodePoster from "@/components/episode/EpisodePoster";
  */
 export default function EpisodeWall({
   episodes,
-  itemWidth = 300,
-  gap = 24,
+  itemWidth = 360,
+  gap = 28,
   label = "Episodes",
 }: {
   episodes: Episode[];
