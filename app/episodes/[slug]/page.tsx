@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import AcquiredEpisodeNav from "@/components/episode/AcquiredEpisodeNav";
 import {
   acquiredEpisodes,
   getAcquiredEpisode,
@@ -28,19 +29,23 @@ export async function generateMetadata({
   };
 }
 
-function EpisodeArtwork({ episode, large = false }: { episode: AcquiredEpisode; large?: boolean }) {
+function EpisodeArtwork({ episode, small = false }: { episode: AcquiredEpisode; small?: boolean }) {
   const markSize =
     episode.mark.length > 8
-      ? "text-[clamp(2.3rem,6vw,6.6rem)]"
+      ? small
+        ? "text-[clamp(1.25rem,3vw,3rem)]"
+        : "text-[clamp(2rem,5vw,5.8rem)]"
       : episode.mark.length > 5
-        ? "text-[clamp(3rem,7vw,8rem)]"
-        : "text-[clamp(4.5rem,11vw,12rem)]";
+        ? small
+          ? "text-[clamp(1.6rem,3.4vw,3.8rem)]"
+          : "text-[clamp(2.8rem,6vw,7rem)]"
+        : small
+          ? "text-[clamp(2rem,4vw,4.8rem)]"
+          : "text-[clamp(4rem,10vw,10rem)]";
 
   return (
     <div
-      className={`episode-transition-card relative isolate grid aspect-square overflow-hidden rounded-[0.45rem] shadow-[0_30px_110px_rgba(0,0,0,0.45)] ${
-        large ? "place-items-center" : "place-items-center"
-      }`}
+      className="episode-transition-card relative isolate grid aspect-square place-items-center overflow-hidden rounded-[0.45rem] shadow-[0_30px_110px_rgba(0,0,0,0.45)]"
       style={
         {
           background: episode.palette.background,
@@ -70,79 +75,192 @@ function EpisodeArtwork({ episode, large = false }: { episode: AcquiredEpisode; 
   );
 }
 
-function VinylPlayer({ episode }: { episode: AcquiredEpisode }) {
+function ListenButtons({ episode }: { episode: AcquiredEpisode }) {
   return (
-    <div className="relative mx-auto grid aspect-square w-[min(68vw,360px)] place-items-center">
-      <div className="episode-record absolute inset-0 rounded-full bg-[repeating-radial-gradient(circle,#050505_0_7px,#171717_8px_12px,#070707_13px_18px)] shadow-[0_34px_100px_rgba(0,0,0,0.55)]" />
-      <div
-        className="relative z-10 grid h-[34%] w-[34%] place-items-center rounded-full text-center text-[0.66rem] font-black uppercase tracking-[0.16em] text-black"
-        style={{ background: episode.palette.accent }}
-      >
-        Play
-      </div>
-    </div>
-  );
-}
-
-function ExpandableCard({ title }: { title: string }) {
-  return (
-    <button
-      type="button"
-      className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/[0.055] px-5 py-4 text-left text-[0.78rem] font-black uppercase tracking-[0.16em] text-white transition hover:bg-white/[0.09]"
-    >
-      {title}
-      <span className="text-xl leading-none text-white/45">+</span>
-    </button>
-  );
-}
-
-function SponsorGrid() {
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      {["WorkOS", "Anthropic", "Statsig", "Sentry"].map((sponsor) => (
-        <div
-          key={sponsor}
-          className="rounded-xl border border-white/10 bg-white/[0.055] px-4 py-5 text-center text-[0.7rem] font-black uppercase tracking-[0.16em] text-white/62"
+    <div className="flex flex-wrap gap-2">
+      {["Spotify", "Apple", "YouTube"].map((platform) => (
+        <a
+          key={platform}
+          href="https://www.acquired.fm/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-white/12 bg-white/[0.055] px-5 py-3 text-[0.68rem] font-black uppercase tracking-[0.16em] text-white/72 transition hover:bg-white hover:text-[#080d15]"
+          style={{ borderColor: `${episode.palette.accent}33` }}
         >
-          {sponsor}
-        </div>
+          {platform}
+        </a>
       ))}
     </div>
   );
 }
 
-function FixedPlayer({ episode }: { episode: AcquiredEpisode }) {
+function TakeawayTiles({ episode }: { episode: AcquiredEpisode }) {
+  const tiles = [
+    {
+      title: "The strategic unlock",
+      quote: episode.tagline,
+      body: episode.dek,
+    },
+    {
+      title: "The operating system",
+      quote: "The story compounds when incentives, distribution, and culture reinforce one another.",
+      body: episode.description[0],
+    },
+    {
+      title: "The enduring moat",
+      quote: "Great companies turn an initial advantage into a repeatable machine.",
+      body: episode.description[1] ?? episode.dek,
+    },
+    {
+      title: "What to watch",
+      quote: `${episode.categories.join(" + ")} is where the episode's lessons concentrate.`,
+      body: "Use this section as the article-style synthesis: the big theme, the useful tension, and the open question that survives the episode.",
+    },
+  ];
+
   return (
-    <aside className="fixed bottom-5 right-5 z-40 hidden w-[390px] rounded-[1.35rem] border border-white/10 bg-[#111824]/92 p-4 text-white shadow-[0_24px_90px_rgba(0,0,0,0.5)] backdrop-blur-xl lg:block">
-      <div className="flex gap-4">
-        <div
-          className="grid h-16 w-16 shrink-0 place-items-center rounded-md text-lg font-black"
-          style={{ background: episode.palette.background, color: episode.palette.color }}
+    <div className="grid gap-4 md:grid-cols-2">
+      {tiles.map((tile, index) => (
+        <article
+          key={tile.title}
+          className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.22)]"
         >
-          {episode.mark.slice(0, 2)}
+          <p
+            className="text-[0.64rem] font-black uppercase tracking-[0.2em]"
+            style={{ color: episode.palette.accent }}
+          >
+            0{index + 1}
+          </p>
+          <h3 className="mt-4 text-2xl font-black tracking-[-0.05em] text-white">
+            {tile.title}
+          </h3>
+          <blockquote className="mt-5 border-l-2 pl-4 text-xl leading-8 text-white/86" style={{ borderColor: episode.palette.accent }}>
+            “{tile.quote}”
+          </blockquote>
+          <p className="mt-5 leading-7 text-white/62">{tile.body}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
+  const chapters = [
+    ["00:00", "Cold open and why this company matters"],
+    ["14:22", "Origins, constraints, and the first wedge"],
+    ["42:08", "The strategic turn that changed the trajectory"],
+    ["1:18:45", "Business model, culture, and capital allocation"],
+    ["2:06:10", "Lessons, carve outs, and final synthesis"],
+  ];
+
+  return (
+    <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <h3 className="text-2xl font-black tracking-[-0.04em]">Chapters</h3>
+        <ol className="mt-5 divide-y divide-white/10 rounded-[1.25rem] border border-white/10 bg-white/[0.045]">
+          {chapters.map(([time, label]) => (
+            <li key={time} className="flex gap-4 px-5 py-4">
+              <span className="w-20 shrink-0 font-mono text-sm text-white/42">{time}</span>
+              <span className="text-white/72">{label}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-6">
+        <h3 className="text-2xl font-black tracking-[-0.04em]">Transcript excerpt</h3>
+        <div className="mt-5 space-y-5 leading-8 text-white/68">
+          <p>
+            This is where the long-form transcript begins: the narrative setup,
+            the research trail, and the strategic question that makes {episode.name}
+            worth studying.
+          </p>
+          <p>
+            Sources live at the end of the transcript, matching the Acquired pattern
+            where references support the story without interrupting the listening flow.
+          </p>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-black">{episode.name}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-white/45">{episode.date}</p>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/12">
-            <div className="h-full w-[38%] rounded-full bg-white" />
-          </div>
+        <div className="mt-6 rounded-xl bg-black/24 p-4">
+          <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
+            Sources
+          </p>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-white/62">
+            {episode.links.map((link) => (
+              <li key={link}>{link}</li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-between text-sm font-black">
-        <button type="button" className="text-white/60">-15</button>
-        <button
-          type="button"
-          className="grid h-12 w-12 place-items-center rounded-full text-black"
-          style={{ background: episode.palette.accent }}
-          aria-label="Play episode"
-        >
-          ▶
-        </button>
-        <button type="button" className="text-white/60">+15</button>
-        <span className="text-xs text-white/42">0:00 / {episode.duration}</span>
+    </div>
+  );
+}
+
+function RelatedCard({ episode }: { episode: AcquiredEpisode }) {
+  return (
+    <Link href={`/episodes/${episode.slug}`} className="group block">
+      <EpisodeArtwork episode={episode} small />
+      <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-white/42">
+        {episode.season}
+      </p>
+      <h3 className="mt-1 text-3xl font-black tracking-[-0.05em] text-white transition group-hover:text-white/70">
+        {episode.name}
+      </h3>
+      <p className="mt-2 text-white/54">{episode.tagline}</p>
+    </Link>
+  );
+}
+
+function EmailClubClose() {
+  return (
+    <section className="bg-[#081f1a] px-5 py-16 text-white sm:px-8 lg:py-24">
+      <div className="mx-auto grid max-w-[1380px] gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-7 sm:p-10">
+          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#00e1c6]">
+            Emails from Ben & David
+          </p>
+          <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+            Never miss an episode
+          </h2>
+          <p className="mt-5 max-w-xl text-lg leading-8 text-white/68">
+            Get takeaways, research photos, hints at the next episode, and your
+            vote on future topics.
+          </p>
+          <form className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row">
+            <label className="sr-only" htmlFor="episode-email">
+              Email address
+            </label>
+            <input
+              id="episode-email"
+              type="email"
+              placeholder="email address"
+              className="h-14 flex-1 rounded-full border border-white/15 bg-white px-5 text-black outline-none placeholder:text-black/45 focus:border-[#00e1c6]"
+            />
+            <button
+              type="button"
+              className="h-14 rounded-full bg-[#00e1c6] px-7 text-[0.78rem] font-black uppercase tracking-[0.16em] text-black transition hover:bg-white"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+        <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-7 sm:p-10">
+          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#00e1c6]">
+            Community
+          </p>
+          <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+            The conversation keeps going.
+          </h2>
+          <p className="mt-5 text-lg leading-8 text-white/68">
+            Join the Slack community around the world's greatest company stories.
+          </p>
+          <Link
+            href="#"
+            className="mt-8 inline-flex rounded-full bg-[#00e1c6] px-7 py-4 text-[0.74rem] font-black uppercase tracking-[0.18em] text-black transition hover:bg-white"
+          >
+            Join Slack
+          </Link>
+        </div>
       </div>
-    </aside>
+    </section>
   );
 }
 
@@ -155,179 +273,144 @@ export default async function EpisodePage({
   const episode = getAcquiredEpisode(slug);
   if (!episode) notFound();
   const related = getRelatedAcquiredEpisodes(episode.slug, 3);
+  const eyebrow = `${episode.season} ${episode.episode} • ${episode.date}`;
 
   return (
     <main className="min-h-screen bg-[#080d15] pt-[74px] text-white">
-      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-10 sm:px-8 lg:min-h-[calc(100svh-74px)] lg:py-12">
+      <div className="lg:hidden">
+        <AcquiredEpisodeNav episode={episode} />
+      </div>
+
+      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 sm:px-8 lg:py-12">
         <div
           className="absolute inset-0 -z-10 opacity-50"
           style={{
-            background: `radial-gradient(circle at 22% 20%, ${episode.palette.accent}66, transparent 34%), radial-gradient(circle at 78% 8%, ${episode.palette.background}88, transparent 32%)`,
+            background: `radial-gradient(circle at 18% 18%, ${episode.palette.accent}55, transparent 32%), radial-gradient(circle at 78% 4%, ${episode.palette.background}88, transparent 34%)`,
           }}
         />
-        <div className="mx-auto grid max-w-[1480px] gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <aside className="episode-left-panel">
-            <Link
-              href="/"
-              className="inline-flex text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/48 transition hover:text-white"
-            >
-              ← All Episodes
-            </Link>
-            <p className="mt-8 text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/42">
-              Presented by {episode.sponsor}
-            </p>
-            <div className="mt-4">
-              <EpisodeArtwork episode={episode} large />
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {episode.categories.map((category) => (
-                <span
-                  key={category}
-                  className="rounded-full border border-white/12 bg-white/[0.06] px-3 py-1.5 text-[0.62rem] font-black uppercase tracking-[0.16em] text-white/60"
-                >
-                  {category}
-                </span>
-              ))}
-            </div>
-            <h1 className="mt-6 max-w-xl font-display text-[clamp(3rem,7vw,7.6rem)] leading-[0.78] tracking-[-0.08em]">
-              {episode.name}
-            </h1>
-            <p className="mt-4 text-[0.72rem] font-black uppercase tracking-[0.18em] text-white/42">
-              {episode.season} {episode.episode} • {episode.date}
-            </p>
-            <div className="mt-8 grid gap-3">
-              <ExpandableCard title="Transcript" />
-              <ExpandableCard title="Sources" />
-            </div>
-          </aside>
+        <div className="mx-auto grid max-w-[1480px] gap-12 lg:grid-cols-[minmax(280px,0.38fr)_minmax(0,0.62fr)]">
+          <div className="hidden lg:block">
+            <AcquiredEpisodeNav episode={episode} />
+          </div>
 
-          <article className="episode-copy-panel self-start lg:pt-20">
-            <div className="grid gap-10 xl:grid-cols-[1fr_0.62fr]">
-              <div>
-                <p className="max-w-3xl font-display text-[clamp(2.8rem,7vw,7.8rem)] leading-[0.82] tracking-[-0.08em]">
-                  {episode.tagline}
-                </p>
-                <p className="mt-8 text-[0.76rem] font-black uppercase tracking-[0.2em] text-white/42">
-                  Overview
-                </p>
-                <div className="mt-5 max-w-3xl space-y-6 text-lg leading-8 text-white/72">
-                  <p>{episode.dek}</p>
-                  {episode.description.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
+          <article className="episode-copy-panel space-y-24">
+            <section id="episode-hero" className="scroll-mt-28">
+              <div className="grid items-end gap-8 xl:grid-cols-[1fr_360px]">
+                <div>
+                  <div className="flex flex-wrap items-center gap-3 text-[0.7rem] font-black uppercase tracking-[0.18em] text-white/42">
+                    <Link href="/episodes" className="hover:text-white">
+                      Episodes
+                    </Link>
+                    <span>/</span>
+                    <span>{episode.label}</span>
+                  </div>
+                  <p className="mt-8 text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/42">
+                    {eyebrow}
+                  </p>
+                  <h1 className="mt-4 max-w-4xl font-display text-[clamp(4.5rem,11vw,11rem)] leading-[0.76] tracking-[-0.08em]">
+                    {episode.name}
+                  </h1>
+                  <p className="mt-6 text-2xl leading-8 text-white/76">{episode.guestLine}</p>
+                  <div className="mt-8">
+                    <ListenButtons episode={episode} />
+                  </div>
+                  <p className="mt-5 text-sm font-black uppercase tracking-[0.18em] text-white/42">
+                    Runtime {episode.duration}
+                  </p>
+                </div>
+                <EpisodeArtwork episode={episode} />
+              </div>
+            </section>
+
+            <section id="overview" className="scroll-mt-32">
+              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+                Overview
+              </p>
+              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+                {episode.tagline}
+              </h2>
+              <div className="mt-8 max-w-3xl space-y-6 text-xl leading-9 text-white/72">
+                <p className="text-2xl leading-9 text-white/86">{episode.dek}</p>
+                {episode.description.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
+
+            <section id="key-takeaways" className="scroll-mt-32">
+              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+                Key Takeaways
+              </p>
+              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+                Themes worth stealing
+              </h2>
+              <div className="mt-8">
+                <TakeawayTiles episode={episode} />
+              </div>
+            </section>
+
+            <section id="transcript" className="scroll-mt-32">
+              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+                Transcript
+              </p>
+              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+                Chapters, timestamps, and sources
+              </h2>
+              <div className="mt-8">
+                <TranscriptBlock episode={episode} />
+              </div>
+            </section>
+
+            <section id="guest-links" className="scroll-mt-32 pb-10">
+              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+                Guest & links
+              </p>
+              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+                Follow the research trail
+              </h2>
+              <div className="mt-8 grid gap-8 lg:grid-cols-2">
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6">
+                  <h3 className="text-2xl font-black tracking-[-0.04em]">{episode.guestLine}</h3>
+                  <p className="mt-4 leading-7 text-white/62">
+                    Hosted by the Acquired team, with research focused on {episode.name}
+                    and the company-building lessons behind the episode.
+                  </p>
+                </div>
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6">
+                  <h3 className="text-2xl font-black tracking-[-0.04em]">Links</h3>
+                  <ul className="mt-5 space-y-3">
+                    {episode.links.map((link) => (
+                      <li key={link}>
+                        <Link href="#" className="text-white/72 transition hover:text-white">
+                          {link} →
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-              <div className="self-start rounded-[1.35rem] border border-white/10 bg-white/[0.045] p-5">
-                <VinylPlayer episode={episode} />
-                <button
-                  type="button"
-                  className="mt-6 w-full rounded-full py-4 text-[0.74rem] font-black uppercase tracking-[0.18em] text-black transition hover:bg-white"
-                  style={{ background: episode.palette.accent }}
-                >
-                  Play Episode
-                </button>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="acquired-scroll-section border-t border-white/10 bg-[#0b111d] px-5 py-16 sm:px-8 lg:py-24">
-        <div className="mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <aside className="space-y-10">
-            <div>
-              <p className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Many thanks to our season partners
-              </p>
-              <div className="mt-5">
-                <SponsorGrid />
-              </div>
-            </div>
-            <div>
-              <p className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Listen
-              </p>
-              <div className="mt-4 grid gap-3">
-                {["Spotify", "Apple Podcasts", "YouTube"].map((platform) => (
-                  <button
-                    key={platform}
-                    type="button"
-                    className="rounded-2xl border border-white/10 bg-white/[0.055] px-5 py-4 text-left text-sm font-black uppercase tracking-[0.14em] text-white/72 transition hover:bg-white/[0.09]"
-                  >
-                    {platform}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          <article>
-            <h2 className="font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
-              More on the episode
-            </h2>
-
-            <div className="mt-10 grid gap-10 md:grid-cols-2">
-              <section>
-                <h3 className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                  Links
-                </h3>
-                <ul className="mt-5 space-y-4">
-                  {episode.links.map((link) => (
-                    <li key={link}>
-                      <Link href="#" className="text-lg text-white/76 transition hover:text-white">
-                        {link} →
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              <section>
-                <h3 className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                  Carve Outs
-                </h3>
-                <ul className="mt-5 space-y-4">
-                  {episode.carveOuts.map((item) => (
-                    <li key={item} className="text-lg text-white/76">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </div>
-
-            <section className="mt-12 rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-6">
-              <h3 className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Corrections
-              </h3>
-              <p className="mt-4 text-white/70">
-                {episode.corrections ?? "No corrections yet. Send us notes and source material anytime."}
-              </p>
-            </section>
-
-            <section className="mt-16">
-              <h3 className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                More Episodes
-              </h3>
-              <div className="mt-5 grid gap-4 md:grid-cols-3">
-                {related.map((item) => (
-                  <Link key={item.slug} href={`/episodes/${item.slug}`} className="group">
-                    <EpisodeArtwork episode={item} />
-                    <p className="mt-3 text-sm font-black uppercase tracking-[0.16em] text-white/42">
-                      {item.season}
-                    </p>
-                    <p className="text-xl font-black tracking-[-0.04em] text-white group-hover:text-white/72">
-                      {item.name}
-                    </p>
-                  </Link>
-                ))}
-              </div>
             </section>
           </article>
         </div>
       </section>
 
-      <FixedPlayer episode={episode} />
+      <section className="border-t border-white/10 bg-[#0b111d] px-5 py-16 sm:px-8 lg:py-24">
+        <div className="mx-auto max-w-[1480px]">
+          <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+            More from the series
+          </p>
+          <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+            Related episodes
+          </h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {related.map((item) => (
+              <RelatedCard key={item.slug} episode={item} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <EmailClubClose />
     </main>
   );
 }
