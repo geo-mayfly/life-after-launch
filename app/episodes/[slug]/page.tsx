@@ -250,7 +250,7 @@ function EmailClubClose() {
             The conversation keeps going.
           </h2>
           <p className="mt-5 text-lg leading-8 text-white/68">
-            Join the Slack community around the world's greatest company stories.
+            Join the Slack community around the world&apos;s greatest company stories.
           </p>
           <Link
             href="#"
