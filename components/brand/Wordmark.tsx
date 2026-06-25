@@ -44,8 +44,10 @@ export default function Wordmark({
         letterSpacing: "-0.01em",
         ...sizeStyles[size],
       }}
-      aria-label="Life After Launch"
     >
+      {/* Accessible name via hidden text — works whether or not this is a link
+          (aria-label is prohibited on a bare span). */}
+      <span className="sr-only">Life After Launch</span>
       <span aria-hidden style={{ display: stacked ? "block" : "inline" }}>
         <em style={{ fontStyle: "italic", fontWeight: 400 }}>Life After</em>
       </span>{" "}

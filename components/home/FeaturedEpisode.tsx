@@ -9,85 +9,102 @@ import EpisodeCover from "@/components/episode/EpisodeCover";
 import MorphLink from "@/components/motion/MorphLink";
 
 /**
- * FeaturedEpisode — the acquired.fm-style content-forward hero. The newest
- * episode IS the hero: big collectible cover on one side; brand wordmark +
- * "the latest" + episode title + meta + listen on the other. Tone-tinted to
- * the featured episode. Keeps the 5-second brand test via the wordmark lockup.
+ * FeaturedEpisode — the acquired.fm-style content-forward hero.
+ *
+ * A slim brand MASTHEAD (wordmark + tagline) establishes identity in the first
+ * second, then the newest episode IS the hero below it: a big collectible cover
+ * (given visual dominance) paired with title / meta / hook / listen. Brand and
+ * content no longer compete in one column — the masthead is the brand, the grid
+ * is the episode. The episode title is the page H1 (content-forward, like acquired).
  */
 export default function FeaturedEpisode({ episode }: { episode: Episode }) {
   const href = `/episodes/${episode.slug}`;
-  const overview = episode.overview[0];
 
   return (
     <BlueWall
       tone={episode.tone}
       as="section"
-      className="overflow-hidden pb-sp-9 pt-[112px]"
+      className="overflow-hidden pb-sp-9 pt-[104px]"
       vignette={0.5}
       aria-labelledby="featured-title"
     >
-      <div className="mx-auto grid max-w-wall items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-        {/* Brand + featured episode meta */}
-        <div className="order-2 lg:order-1">
-          <div className="hero-rise" style={{ animationDelay: "0.05s" }}>
-            <Wordmark size="lg" href="/" />
-            <p className="mt-3 max-w-md font-display text-h3 italic text-on-blue">
-              {site.tagline}
-            </p>
-          </div>
-
-          <div
-            className="hero-rise mt-9 flex items-center gap-3"
-            style={{ animationDelay: "0.18s" }}
-          >
-            <span className="inline-block h-2 w-2 rounded-full bg-marigold" />
-            <span className="eyebrow text-on-blue">The latest episode</span>
-          </div>
-
-          <p className="hero-rise mt-4 eyebrow text-on-blue-soft" style={{ animationDelay: "0.24s" }}>
-            {episodeEyebrow(episode)}
-          </p>
-
-          <h1
-            id="featured-title"
-            className="hero-rise mt-3 max-w-2xl font-display text-h1 leading-[1.02] text-on-blue"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <Link href={href} className="transition-opacity hover:opacity-90">
-              {episode.episodeTitle}
-            </Link>
+      <div className="mx-auto max-w-wall px-5 sm:px-8">
+        {/* Masthead — brand identity, the 5-second test. The wordmark is the
+            page H1 (the homepage is about the show); the nav already links home,
+            so the masthead wordmark is non-interactive display. */}
+        <div
+          className="hero-rise flex flex-col gap-3 border-b border-[rgba(255,255,255,0.16)] pb-7 sm:flex-row sm:items-end sm:justify-between"
+          style={{ animationDelay: "0.05s" }}
+        >
+          <h1 className="leading-none">
+            <Wordmark size="lg" href={null} />
           </h1>
-
-          <p
-            className="hero-rise mt-5 max-w-xl text-lead text-on-blue"
-            style={{ animationDelay: "0.4s" }}
-          >
-            {episode.hook}
-          </p>
-
-          <div
-            className="hero-rise mt-8 flex flex-wrap items-center gap-x-5 gap-y-4"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <ListenButtons listen={episode.listen} />
-            <Link href={href} className="spark-link font-semibold text-on-blue">
-              Read the takeaways →
-            </Link>
-          </div>
-
-          <p className="sr-only">{overview}</p>
+          <p className="font-display text-h3 italic text-on-blue">{site.tagline}</p>
         </div>
 
-        {/* The big collectible cover (clickable, morphs to the episode) */}
-        <div className="order-1 mx-auto w-full max-w-[440px] lg:order-2 lg:max-w-none">
-          <MorphLink href={href} className="group block" ariaLabel={`Open ${episode.episodeTitle}`}>
+        {/* Featured episode — the cover is given the dominant column. */}
+        <div className="mt-10 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div className="order-2 lg:order-1">
             <div
-              className="hero-rise aspect-[4/5] overflow-hidden rounded-lg shadow-lg transition-transform duration-base ease-brand group-hover:-translate-y-1"
-              style={{ viewTransitionName: `poster-${episode.slug}`, animationDelay: "0.2s" }}
+              className="hero-rise flex items-center gap-2.5"
+              style={{ animationDelay: "0.16s" }}
             >
-              <EpisodeCover episode={episode} caption={false} />
+              <span className="inline-block h-2 w-2 rounded-full bg-marigold" />
+              <span className="eyebrow text-on-blue">The latest episode</span>
             </div>
-          </MorphLink>
+
+            <p
+              className="hero-rise mt-4 eyebrow text-on-blue-soft"
+              style={{ animationDelay: "0.22s" }}
+            >
+              {episodeEyebrow(episode)}
+            </p>
+
+            <h2
+              id="featured-title"
+              className="hero-rise mt-3 max-w-xl font-display text-h1 leading-[1.02] text-on-blue"
+              style={{ animationDelay: "0.28s" }}
+            >
+              <Link href={href} className="transition-opacity hover:opacity-90">
+                {episode.episodeTitle}
+              </Link>
+            </h2>
+
+            <p
+              className="hero-rise mt-5 max-w-lg text-lead text-on-blue"
+              style={{ animationDelay: "0.38s" }}
+            >
+              {episode.hook}
+            </p>
+
+            <div
+              className="hero-rise mt-8 flex flex-wrap items-center gap-x-5 gap-y-4"
+              style={{ animationDelay: "0.48s" }}
+            >
+              <ListenButtons listen={episode.listen} />
+              <Link href={href} className="spark-link font-semibold text-on-blue">
+                Read the takeaways →
+              </Link>
+            </div>
+
+            <p className="sr-only">{episode.overview[0]}</p>
+          </div>
+
+          {/* The big collectible cover — visually dominant, morphs to the episode. */}
+          <div className="order-1 mx-auto w-full max-w-[480px] lg:order-2 lg:max-w-none">
+            <MorphLink
+              href={href}
+              className="group block"
+              ariaLabel={`Open ${episode.episodeTitle}`}
+            >
+              <div
+                className="hero-rise aspect-[4/5] overflow-hidden rounded-lg shadow-lg transition-transform duration-base ease-brand group-hover:-translate-y-1"
+                style={{ viewTransitionName: `poster-${episode.slug}`, animationDelay: "0.2s" }}
+              >
+                <EpisodeCover episode={episode} caption={false} />
+              </div>
+            </MorphLink>
+          </div>
         </div>
       </div>
     </BlueWall>
