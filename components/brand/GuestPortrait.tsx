@@ -40,6 +40,15 @@ export default function GuestPortrait({
       style={{ transform: rotate ? `rotate(${rotate}deg)` : undefined, ...style }}
       aria-hidden
     >
+      {/* a strip of collage "tape" pinning the photo to the wall */}
+      <span
+        className="absolute -top-2 left-1/2 z-10 h-5 w-[34%] -translate-x-1/2 -rotate-2"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(246,242,233,0.42), rgba(246,242,233,0.26))",
+          boxShadow: "0 1px 2px rgba(6,42,82,0.18)",
+        }}
+      />
       <div
         className="cut-edge relative h-full w-full overflow-hidden"
         style={{
