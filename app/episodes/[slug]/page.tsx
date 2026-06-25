@@ -309,12 +309,18 @@ export default async function EpisodePage({
   const eyebrow = `${episode.season} ${episode.episode} • ${episode.date}`;
 
   return (
-    <main className="min-h-screen bg-[#080d15] pt-[74px] text-white">
+    <main
+      className="min-h-screen pt-[74px] text-white"
+      style={{
+        backgroundColor: "#080d15",
+        backgroundImage: `linear-gradient(115deg, rgba(0,0,0,0.34) 0%, rgba(8,13,21,0.82) 58%, rgba(8,13,21,0.96) 100%), radial-gradient(85% 58% at 16% 0%, ${episode.palette.background} 0%, transparent 62%)`,
+      }}
+    >
       <div className="lg:hidden">
         <AcquiredEpisodeNav episode={episode} />
       </div>
 
-      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 sm:px-8 lg:py-14">
+      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 pb-28 sm:px-8 lg:py-14">
         <div
           className="absolute inset-0 -z-10 opacity-50"
           style={{
@@ -343,10 +349,7 @@ export default async function EpisodePage({
                   <h1 className="mt-4 max-w-4xl font-display text-[clamp(4rem,8vw,7.75rem)] leading-[0.82] tracking-[-0.075em]">
                     {episode.name}
                   </h1>
-                  <p
-                    className="mt-5 max-w-3xl font-display text-[clamp(2.1rem,4.2vw,4.5rem)] leading-[0.92] tracking-[-0.06em]"
-                    style={{ color: episode.palette.accent }}
-                  >
+                  <p className="mt-5 max-w-3xl font-display text-[clamp(2.1rem,4.2vw,4.5rem)] leading-[0.92] tracking-[-0.06em] text-white/82">
                     {episode.tagline}
                   </p>
                   <p className="mt-6 max-w-2xl text-xl leading-8 text-white/68">

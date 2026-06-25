@@ -195,11 +195,11 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
         </div>
       </aside>
 
-      <div className="sticky top-[74px] z-40 border-b border-white/10 bg-[#0b111d]/95 px-4 py-3 backdrop-blur lg:hidden">
+      <div className="fixed inset-x-3 bottom-4 z-50 rounded-full border border-white/12 bg-[#0b111d]/92 p-2 shadow-[0_18px_70px_rgba(0,0,0,0.45)] backdrop-blur lg:hidden">
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex w-full items-center justify-between rounded-full border border-white/10 px-4 py-3 text-[0.72rem] font-black uppercase tracking-[0.16em] text-white"
+          className="flex w-full items-center justify-between rounded-full px-4 py-3 text-[0.72rem] font-black uppercase tracking-[0.16em] text-white"
         >
           On this page
           <span className="text-white/46">{SECTIONS.find((s) => s.id === active)?.label}</span>
@@ -213,7 +213,7 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
           aria-modal="true"
           aria-label="Episode navigation"
         >
-          <div className="absolute inset-x-3 top-[88px] rounded-[1.4rem] border border-white/12 bg-[#0d1420] p-5 text-white shadow-2xl">
+          <div className="absolute inset-x-3 bottom-[86px] max-h-[72vh] overflow-y-auto rounded-[1.4rem] border border-white/12 bg-[#0d1420] p-5 text-white shadow-2xl">
             <div className="flex items-center justify-between">
               <p className="text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/45">
                 On this page
