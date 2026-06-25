@@ -127,7 +127,7 @@ function TakeawayTiles({ episode }: { episode: AcquiredEpisode }) {
         >
           <div>
             <p
-              className="text-[0.64rem] font-black uppercase tracking-[0.2em]"
+            className="text-[0.64rem] font-black uppercase tracking-[0.2em] opacity-70"
               style={{ color: episode.palette.accent }}
             >
               0{index + 1}

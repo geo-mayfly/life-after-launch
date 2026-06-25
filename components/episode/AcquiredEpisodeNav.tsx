@@ -207,7 +207,12 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[70] bg-black/55 backdrop-blur-sm lg:hidden">
+        <div
+          className="fixed inset-0 z-[70] bg-black/72 backdrop-blur-sm lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Episode navigation"
+        >
           <div className="absolute inset-x-3 top-[88px] rounded-[1.4rem] border border-white/12 bg-[#0d1420] p-5 text-white shadow-2xl">
             <div className="flex items-center justify-between">
               <p className="text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/45">
