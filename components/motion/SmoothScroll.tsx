@@ -21,6 +21,9 @@ export default function SmoothScroll() {
       touchMultiplier: 1.6,
     });
 
+    // Expose for jump-links (lib/scroll.ts) so they don't fight the scroll loop.
+    (window as unknown as { lenis?: Lenis }).lenis = lenis;
+
     let raf = 0;
     function loop(time: number) {
       lenis.raf(time);
@@ -31,6 +34,7 @@ export default function SmoothScroll() {
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      delete (window as unknown as { lenis?: Lenis }).lenis;
     };
   }, []);
 

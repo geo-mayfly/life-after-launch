@@ -14,15 +14,16 @@ import {
   breadcrumbSchema,
 } from "@/lib/schema";
 import JsonLd from "@/components/JsonLd";
+import BlueWall from "@/components/brand/BlueWall";
 import Eyebrow from "@/components/ui/Eyebrow";
 import EpisodeHero from "@/components/episode/EpisodeHero";
+import EpisodeRail from "@/components/episode/EpisodeRail";
+import EpisodeMobileNav from "@/components/episode/EpisodeMobileNav";
 import EpisodeEmbed from "@/components/episode/EpisodeEmbed";
 import KeyTakeaways from "@/components/episode/KeyTakeaways";
-import PullQuote from "@/components/episode/PullQuote";
-import Chapters from "@/components/episode/Chapters";
+import Transcript from "@/components/episode/Transcript";
+import GuestLinks from "@/components/episode/GuestLinks";
 import RelatedWall from "@/components/episode/RelatedWall";
-import StickyListenBar from "@/components/episode/StickyListenBar";
-import CloudHead from "@/components/brand/CloudHead";
 import EmailSignup from "@/components/layout/EmailSignup";
 import SlackBlock from "@/components/layout/SlackBlock";
 import { Reveal } from "@/components/motion/Reveal";
@@ -42,6 +43,8 @@ export async function generateMetadata({
   return buildEpisodeMetadata(episode);
 }
 
+const sectionPad = "px-5 py-sp-8 scroll-mt-[88px] sm:px-8 lg:px-12";
+
 export default async function EpisodePage({
   params,
 }: {
@@ -52,9 +55,6 @@ export default async function EpisodePage({
   if (!episode) notFound();
 
   const related = getRelatedEpisodes(episode, 3);
-  const guestName = episode.anonymous
-    ? "An anonymous Founder"
-    : episode.guestName;
 
   return (
     <>
@@ -71,105 +71,72 @@ export default async function EpisodePage({
         ]}
       />
 
-      <EpisodeHero episode={episode} />
+      {/* ── Two-panel: sticky rail (left) + content (right) ── */}
+      <div className="lg:grid lg:grid-cols-[minmax(300px,32%)_minmax(0,1fr)]">
+        {/* LEFT — navigation + details (sticky), desktop only */}
+        <BlueWall tone={episode.tone} as="aside" className="hidden lg:block" vignette={0.5}>
+          <EpisodeRail episode={episode} />
+        </BlueWall>
 
-      {/* Overview — long, on-voice description on Bone paper. */}
-      <section className="paper-grain bg-bone py-sp-9" aria-labelledby="overview-heading">
-        <div className="mx-auto max-w-content px-5 sm:px-8">
-          <Reveal>
-            <h2 id="overview-heading" className="eyebrow text-deep-blue">
-              The episode
-            </h2>
-            <div className="prose-bone mt-5 text-lead">
-              {episode.overview.map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
+        {/* RIGHT — content */}
+        <div className="min-w-0">
+          <EpisodeHero episode={episode} />
 
-      {/* Optional inline embed (off unless `embed` is set). */}
-      {episode.embed && (
-        <section className="bg-bone pb-sp-8">
-          <EpisodeEmbed episode={episode} />
-        </section>
-      )}
+          <div className="bg-bone">
+            {/* 2 — Overview */}
+            <section id="overview" className={sectionPad} aria-labelledby="overview-h">
+              <Reveal>
+                <h2 id="overview-h" className="font-display text-h2 text-ink">
+                  Overview
+                </h2>
+                <div className="prose-bone mt-5 text-lead">
+                  {episode.overview.map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              </Reveal>
+            </section>
 
-      {/* Key Takeaways — the SEO/GEO centrepiece. */}
-      <section className="bg-bone pb-sp-9">
-        <KeyTakeaways episode={episode} />
-      </section>
-
-      {/* Pull-quote — one big display-serif grab, scale-in. */}
-      <section className="bg-bone">
-        <PullQuote
-          text={episode.pullQuote.text}
-          attribution={episode.pullQuote.attribution}
-        />
-      </section>
-
-      {/* Chapters + Guest & links. */}
-      <section className="bg-bone py-sp-9">
-        <div className="mx-auto grid max-w-content gap-12 px-5 sm:px-8 md:grid-cols-2">
-          {episode.chapters && episode.chapters.length > 0 && (
-            <Reveal>
-              <h2 className="eyebrow text-deep-blue">Chapters</h2>
-              <div className="mt-5">
-                <Chapters chapters={episode.chapters} />
-              </div>
-            </Reveal>
-          )}
-
-          <Reveal delay={0.06}>
-            <h2 className="eyebrow text-deep-blue">Guest &amp; links</h2>
-            <div className="mt-5 flex items-start gap-4">
-              {episode.anonymous && (
-                <CloudHead size={56} color="var(--deep-blue)" />
-              )}
-              <div>
-                <p className="font-semibold text-ink">{guestName}</p>
-                {episode.guestBio && (
-                  <p className="mt-2 text-ink-2">{episode.guestBio}</p>
-                )}
-              </div>
-            </div>
-            {episode.links && episode.links.length > 0 && (
-              <ul className="mt-6 flex flex-col gap-2">
-                {episode.links.map((l, i) => (
-                  <li key={i}>
-                    <a
-                      href={l.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="spark-link font-medium text-deep-blue"
-                    >
-                      {l.label} →
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            {episode.embed && (
+              <section className="px-5 pb-sp-8 sm:px-8 lg:px-12">
+                <EpisodeEmbed episode={episode} />
+              </section>
             )}
-          </Reveal>
-        </div>
-      </section>
 
-      {/* More from the series. */}
+            {/* 3 — Key Takeaways tiles */}
+            <section id="key-takeaways" className={sectionPad}>
+              <KeyTakeaways episode={episode} />
+            </section>
+
+            {/* 4 — Transcript + chapters */}
+            <section id="transcript" className={sectionPad}>
+              <Transcript episode={episode} />
+            </section>
+
+            {/* 5 — Guest & links */}
+            <section id="guest-links" className={`${sectionPad} pb-sp-9`}>
+              <GuestLinks episode={episode} />
+            </section>
+          </div>
+        </div>
+      </div>
+
+      {/* Sentinel: marks the end of the in-pane area (mobile nav hides past it). */}
+      <div id="episode-twopanel-end" aria-hidden />
+
+      {/* ── Full width, outside the nav pane ── */}
       {related.length > 0 && (
-        <section className="bg-bone pb-sp-9">
+        <section className="bg-bone pb-sp-9 pt-sp-9">
           <div className="mx-auto max-w-content px-5 sm:px-8">
             <Eyebrow>YOU MAY ALSO ENJOY</Eyebrow>
             <h2 className="mb-8 mt-3 font-display text-h2 text-ink">
               More from the series
             </h2>
-          </div>
-          <div className="mx-auto max-w-content px-5 sm:px-8">
             <RelatedWall episodes={related} />
           </div>
         </section>
       )}
 
-      {/* Club close + email. */}
       <div className="bg-bone pb-sp-9">
         <EmailSignup />
       </div>
@@ -177,7 +144,8 @@ export default async function EpisodePage({
         <SlackBlock />
       </div>
 
-      <StickyListenBar episode={episode} />
+      {/* Mobile "On this page" bar + drawer (replaces the desktop rail) */}
+      <EpisodeMobileNav episode={episode} />
 
       <span className="sr-only">
         Distilled from {site.name}. Listen on Spotify, Apple Podcasts and YouTube.

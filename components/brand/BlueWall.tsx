@@ -8,19 +8,20 @@ import type { CSSProperties, ReactNode } from "react";
  * soft, uneven vignette. Carries depth through deeper blues, never greys.
  */
 
-// Fine plaster/ink tooth — a desaturated fractal-noise tile.
+// Fine plaster/ink tooth — a desaturated fractal-noise tile. Kept cheap to
+// rasterize (low octaves) since several walls paint per page.
 const NOISE_SVG =
-  "<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'>" +
-  "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/>" +
+  "<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>" +
+  "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/>" +
   "<feColorMatrix type='saturate' values='0'/></filter>" +
-  "<rect width='100%' height='100%' filter='url(#n)' opacity='0.65'/></svg>";
+  "<rect width='100%' height='100%' filter='url(#n)' opacity='0.6'/></svg>";
 
 export const noiseUrl = `url("data:image/svg+xml,${encodeURIComponent(NOISE_SVG)}")`;
 
 // Coarse hand-plaster blotches — big soft clouds of tone for unevenness.
 const PLASTER_SVG =
-  "<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'>" +
-  "<filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' seed='7'/>" +
+  "<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'>" +
+  "<filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='1' seed='7'/>" +
   "<feColorMatrix type='saturate' values='0'/></filter>" +
   "<rect width='100%' height='100%' filter='url(#p)' opacity='0.5'/></svg>";
 
@@ -30,8 +31,9 @@ type Props = {
   tone?: Tone;
   children?: ReactNode;
   className?: string;
-  as?: "section" | "div" | "header" | "article" | "footer";
+  as?: "section" | "div" | "header" | "article" | "footer" | "aside";
   style?: CSSProperties;
+  id?: string;
   /** Vignette strength 0–1. */
   vignette?: number;
 };
@@ -42,6 +44,7 @@ export default function BlueWall({
   className = "",
   as: Tag = "div",
   style,
+  id,
   vignette = 0.55,
 }: Props) {
   const recipe = toneRecipe[tone];
@@ -60,7 +63,7 @@ export default function BlueWall({
   };
 
   return (
-    <Tag className={className} style={wallStyle} data-tone={tone}>
+    <Tag id={id} className={className} style={wallStyle} data-tone={tone}>
       {/* coarse hand-plaster blotches */}
       <span
         aria-hidden

@@ -9,9 +9,10 @@ import ListenButtons from "@/components/episode/ListenButtons";
 import EpisodeCover from "@/components/episode/EpisodeCover";
 
 /**
- * EpisodeHero (brief §6.3) — receives the poster→page morph. The collage cover
- * on the right carries the shared view-transition-name (the slug) and fills
- * what used to be an empty column. Reading-critical copy is full-opacity white.
+ * EpisodeHero — the top of the right content panel. Breadcrumb, eyebrow, title,
+ * guest line, hook, Listen, runtime, plus the collage cover that receives the
+ * poster→page morph (shared view-transition-name). id="episode-hero" lets the
+ * left rail fade its compact identity in once this scrolls past.
  */
 export default function EpisodeHero({ episode }: { episode: Episode }) {
   const roleCompany = [episode.guestRole, episode.guestCompany]
@@ -22,8 +23,14 @@ export default function EpisodeHero({ episode }: { episode: Episode }) {
     : [episode.guestName, roleCompany].filter(Boolean).join(" — ");
 
   return (
-    <BlueWall tone={episode.tone} as="header" className="pb-sp-9 pt-[120px]" vignette={0.5}>
-      <div className="mx-auto max-w-content px-5 sm:px-8">
+    <BlueWall
+      id="episode-hero"
+      tone={episode.tone}
+      as="header"
+      className="pb-sp-8 pt-[100px]"
+      vignette={0.5}
+    >
+      <div className="px-5 sm:px-8 lg:px-12">
         {/* Breadcrumb (also emitted as BreadcrumbList schema by the page). */}
         <nav aria-label="Breadcrumb" className="mb-7">
           <ol className="flex flex-wrap items-center gap-2 text-small text-on-blue-soft">
@@ -43,10 +50,10 @@ export default function EpisodeHero({ episode }: { episode: Episode }) {
           </ol>
         </nav>
 
-        <div className="grid items-center gap-10 md:grid-cols-[1.25fr_0.75fr]">
+        <div className="grid items-center gap-8 md:grid-cols-[1fr_240px]">
           <div>
             <Eyebrow on="dark">{episodeEyebrow(episode)}</Eyebrow>
-            <h1 className="mt-4 max-w-3xl font-display text-h1 leading-[1.02] text-on-blue">
+            <h1 className="mt-4 font-display text-h1 leading-[1.02] text-on-blue">
               {episode.episodeTitle}
             </h1>
             <p className="mt-5 flex items-center gap-3 text-lead text-on-blue">
@@ -61,8 +68,8 @@ export default function EpisodeHero({ episode }: { episode: Episode }) {
             </div>
           </div>
 
-          {/* The collage cover — morph target, fills the column. */}
-          <div className="mx-auto w-full max-w-[360px] md:max-w-none">
+          {/* The collage cover — the poster→page morph target. */}
+          <div className="mx-auto w-[180px] sm:w-[220px] md:w-[240px]">
             <div
               className="aspect-[4/5] overflow-hidden rounded-lg shadow-lg"
               style={{ viewTransitionName: `poster-${episode.slug}` }}

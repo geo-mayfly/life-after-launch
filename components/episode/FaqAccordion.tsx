@@ -1,12 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { ease } from "@/lib/motion";
 
 /**
- * FAQ accordion (brief §6.3) — items expand/collapse with height + fade.
- * The visible counterpart to the FAQPage JSON-LD. Fully keyboard accessible.
+ * FAQ accordion (brief §6.3) — items expand/collapse with a CSS grid-rows
+ * height transition (no JS animation library, so the episode route stays
+ * framer-free and fast). The visible counterpart to the FAQPage JSON-LD.
  */
 export default function FaqAccordion({
   items,
@@ -30,34 +29,28 @@ export default function FaqAccordion({
                 onClick={() => setOpen(isOpen ? null : i)}
               >
                 <span className="font-semibold text-ink">{item.q}</span>
-                <motion.span
+                <span
                   aria-hidden
-                  animate={{ rotate: isOpen ? 45 : 0 }}
-                  transition={{ duration: 0.24, ease }}
-                  className="shrink-0 text-deep-blue"
+                  className="shrink-0 text-deep-blue transition-transform duration-base ease-brand"
+                  style={{ transform: isOpen ? "rotate(45deg)" : "none" }}
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
-                </motion.span>
+                </span>
               </button>
             </h4>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  id={`faq-panel-${i}`}
-                  role="region"
-                  aria-labelledby={`faq-trigger-${i}`}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.28, ease }}
-                  style={{ overflow: "hidden" }}
-                >
-                  <p className="pb-5 pr-8 text-ink-2">{item.a}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div
+              id={`faq-panel-${i}`}
+              role="region"
+              aria-labelledby={`faq-trigger-${i}`}
+              className="grid transition-[grid-template-rows] duration-base ease-brand"
+              style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-5 pr-8 text-ink-2">{item.a}</p>
+              </div>
+            </div>
           </div>
         );
       })}
