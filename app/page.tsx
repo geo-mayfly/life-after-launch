@@ -1,141 +1,14 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import MorphLink from "@/components/motion/MorphLink";
+import { acquiredEpisodes, type AcquiredEpisode } from "@/lib/acquired";
 
 export const metadata: Metadata = {
   title: "Acquired Podcast | Every Company Has a Story",
   description:
     "Deep dives into how the world's greatest companies were built and why they worked.",
 };
-
-type EpisodeTileData = {
-  name: string;
-  mark: string;
-  label: string;
-  portrait?: boolean;
-  style: {
-    background: string;
-    color: string;
-    accent: string;
-  };
-};
-
-const tiles: EpisodeTileData[] = [
-  {
-    name: "Visa",
-    mark: "VISA",
-    label: "Visa",
-    style: { background: "#0757f9", color: "#ffffff", accent: "#9fc4ff" },
-  },
-  {
-    name: "Charlie Munger",
-    mark: "CM",
-    label: "Charlie",
-    portrait: true,
-    style: { background: "#c7b18e", color: "#142033", accent: "#f6eee0" },
-  },
-  {
-    name: "Rolex",
-    mark: "ROLEX",
-    label: "Rolex",
-    style: { background: "#007241", color: "#f0f7db", accent: "#d8b65a" },
-  },
-  {
-    name: "Ferrari",
-    mark: "F",
-    label: "Ferrari",
-    style: { background: "#ef1708", color: "#fff4ed", accent: "#ffd848" },
-  },
-  {
-    name: "Mark Zuckerberg",
-    mark: "MZ",
-    label: "Mark Zuckerberg",
-    portrait: true,
-    style: { background: "#043c42", color: "#d7f3f1", accent: "#63bfbc" },
-  },
-  {
-    name: "Microsoft",
-    mark: "MICROSOFT",
-    label: "Microsoft I",
-    style: { background: "#006ccf", color: "#ecf7ff", accent: "#72b5ff" },
-  },
-  {
-    name: "Jamie Dimon",
-    mark: "JD",
-    label: "Jamie Dimon",
-    portrait: true,
-    style: { background: "#b9c8bd", color: "#142033", accent: "#f3efe6" },
-  },
-  {
-    name: "Disney I",
-    mark: "Walt Disney",
-    label: "Disney I",
-    style: { background: "#1a1a1a", color: "#eeeeee", accent: "#9d9d9d" },
-  },
-  {
-    name: "Hermes",
-    mark: "HERMES",
-    label: "Hermes",
-    style: { background: "#ff7900", color: "#1e1308", accent: "#f7efe0" },
-  },
-  {
-    name: "Costco",
-    mark: "COSTCO",
-    label: "Costco",
-    style: { background: "#0478d4", color: "#fff6ed", accent: "#ff4b36" },
-  },
-  {
-    name: "Google Search",
-    mark: "G",
-    label: "Google Search",
-    style: { background: "#1b1b1b", color: "#ffffff", accent: "#ffcd38" },
-  },
-  {
-    name: "Trader Joe's",
-    mark: "TRADER JOE'S",
-    label: "Trader Joe's",
-    style: { background: "#e51c14", color: "#fff3ed", accent: "#ffd7b1" },
-  },
-  {
-    name: "Formula 1",
-    mark: "F1",
-    label: "Formula 1",
-    style: { background: "#181818", color: "#ff2b1f", accent: "#ece8e1" },
-  },
-  {
-    name: "Vanguard",
-    mark: "Vanguard",
-    label: "Vanguard",
-    style: { background: "#8b2026", color: "#e9d1d3", accent: "#f2b2b6" },
-  },
-  {
-    name: "Starbucks",
-    mark: "SB",
-    label: "Starbucks",
-    portrait: true,
-    style: { background: "#d9ded1", color: "#173000", accent: "#00704a" },
-  },
-  {
-    name: "Jensen Huang",
-    mark: "JH",
-    label: "Jensen Huang",
-    portrait: true,
-    style: { background: "#203811", color: "#e1eed8", accent: "#7db852" },
-  },
-  {
-    name: "NFL",
-    mark: "NFL",
-    label: "NFL",
-    style: { background: "#0f4877", color: "#ffffff", accent: "#f02936" },
-  },
-  {
-    name: "Morris Chang",
-    mark: "MC",
-    label: "Morris Chang",
-    portrait: true,
-    style: { background: "#c4b59f", color: "#2b1e16", accent: "#f7efe0" },
-  },
-];
 
 const smallEpisodes = [
   {
@@ -186,8 +59,8 @@ const testimonials = [
   },
 ] as const;
 
-function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
-  const palette = tile.style as CSSProperties & { accent: string };
+function EpisodeTile({ tile }: { tile: AcquiredEpisode }) {
+  const palette = tile.palette;
   const markSize =
     tile.mark.length > 8
       ? "text-[clamp(1.35rem,2.65vw,3.35rem)]"
@@ -196,12 +69,14 @@ function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
         : "text-[clamp(2.2rem,4.6vw,5.7rem)]";
 
   return (
-    <Link
-      href="#featured"
+    <MorphLink
+      href={`/episodes/${tile.slug}`}
       className="acquired-tile group relative isolate flex min-h-0 overflow-hidden rounded-[0.28rem] p-4 text-left shadow-[0_14px_46px_rgba(0,0,0,0.18)] outline-none"
+      ariaLabel={`Open ${tile.name} episode`}
       style={{
         background: palette.background,
         color: palette.color,
+        viewTransitionName: `acquired-card-${tile.slug}`,
       }}
     >
       <span
@@ -241,7 +116,7 @@ function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
       >
         {tile.mark}
       </span>
-    </Link>
+    </MorphLink>
   );
 }
 
@@ -287,7 +162,7 @@ export default function HomePage() {
     <div className="bg-white pt-[74px] text-black">
       <section className="acquired-tile-wall relative h-[calc(100svh-74px)] min-h-[640px] overflow-hidden bg-[#f7f7f2] px-0 py-0">
         <div className="acquired-wall-rail grid h-full min-w-[1040px] grid-cols-6 grid-rows-3 gap-4 p-4 sm:p-5">
-          {tiles.map((tile, index) => (
+          {acquiredEpisodes.map((tile, index) => (
             <div
               key={tile.name}
               className="min-h-0"

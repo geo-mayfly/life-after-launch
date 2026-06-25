@@ -393,6 +393,60 @@
   }
 }
 
+.episode-page-hero {
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 52%),
+    linear-gradient(180deg, #0a0f18 0%, #080d15 100%);
+}
+.episode-left-panel {
+  animation: episode-panel-in 0.78s var(--ease) both;
+}
+.episode-copy-panel {
+  animation: episode-copy-in 0.9s var(--ease) 90ms both;
+}
+.episode-transition-card {
+  animation: episode-card-settle 0.9s var(--ease) both;
+}
+.episode-record {
+  animation: episode-record-spin 12s linear infinite;
+}
+
+@keyframes episode-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes episode-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes episode-card-settle {
+  from {
+    filter: blur(8px) saturate(0.8);
+    transform: scale(1.035);
+  }
+  to {
+    filter: none;
+    transform: none;
+  }
+}
+@keyframes episode-record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @supports (animation-timeline: view()) {
   .acquired-scroll-section {
     animation: acquired-section-rise both var(--ease);
@@ -455,7 +509,11 @@
   .acquired-tile,
   .acquired-tile:hover .acquired-vinyl,
   .acquired-tile:focus-visible .acquired-vinyl,
-  .acquired-scroll-section {
+  .acquired-scroll-section,
+  .episode-left-panel,
+  .episode-copy-panel,
+  .episode-transition-card,
+  .episode-record {
     animation: none !important;
   }
   .acquired-tile {
