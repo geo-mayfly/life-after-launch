@@ -62,12 +62,12 @@ export default function EpisodeCover({
         </span>
       </div>
 
-      {/* title + hook */}
+      {/* title + hook (a styled label inside the poster link, not a heading) */}
       {caption && (
         <div className="absolute inset-x-0 bottom-0 p-[5%]">
-          <h3 className="font-display text-[1.5rem] leading-[1.02] text-on-blue [text-shadow:0_2px_10px_rgba(4,18,40,0.55)]">
+          <p className="font-display text-[1.5rem] leading-[1.02] text-on-blue [text-shadow:0_2px_10px_rgba(4,18,40,0.55)]">
             {episode.episodeTitle}
-          </h3>
+          </p>
           <p className="mt-1.5 line-clamp-2 text-[0.85rem] text-on-blue-soft">
             {episode.hook}
           </p>

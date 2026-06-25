@@ -66,6 +66,25 @@ npm run typecheck  # tsc --noEmit
 
 ---
 
+## Verified against the brief's targets (§1.4)
+
+Measured on the production build (`next start`) with Lighthouse + axe-core:
+
+| | Performance | Accessibility | Best-Practices | SEO |
+|---|---|---|---|---|
+| Home (desktop) | 100 | 100 | 100 | 100 |
+| Episode (desktop) | 100 | 100 | 100 | 100 |
+| Home (mobile) | 97 | 100 | 100 | 100 |
+| Episode (mobile) | 95 | 100 | 100 | 100 |
+
+- **axe-core (WCAG 2.0/2.1 A + AA): 0 violations** on Home, Episodes, Episode
+  detail, About and Community.
+- Reduced-motion verified (content visible at rest; Lenis/drift/count-ups off).
+- Poster→episode navigation verified end-to-end.
+
+> Targets were ≥95 Performance / 100 Accessibility / 100 Best-Practices / 100 SEO
+> on the mobile profile — met on every page.
+
 ## Content model
 
 Episodes are **typed TypeScript objects** in `content/episodes/`, one file per

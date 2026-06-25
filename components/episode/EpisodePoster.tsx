@@ -21,11 +21,7 @@ export default function EpisodePoster({
   const vtName = `poster-${episode.slug}`;
 
   return (
-    <MorphLink
-      href={href}
-      className="group block w-full"
-      ariaLabel={`${episode.episodeTitle} — ${episode.hook}`}
-    >
+    <MorphLink href={href} className="group block w-full">
       <article
         style={width ? { width } : undefined}
         className="w-full transition-transform duration-base ease-brand group-hover:-translate-y-1"
