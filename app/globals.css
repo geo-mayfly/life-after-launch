@@ -308,6 +308,16 @@
   }
 }
 
+/* Vinyl record slow spin (decorative; disabled under reduced motion). */
+.record-spin {
+  animation: record-spin 14s linear infinite;
+}
+@keyframes record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);

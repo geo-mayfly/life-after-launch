@@ -15,7 +15,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import Marquee from "@/components/motion/Marquee";
 import TestimonialCard from "@/components/layout/TestimonialCard";
 import FeaturedEpisode from "@/components/home/FeaturedEpisode";
-import RecentReleases from "@/components/episode/RecentReleases";
+import ExploreWall from "@/components/episode/ExploreWall";
 import Collections from "@/components/episode/Collections";
 import TopicRail from "@/components/episode/TopicRail";
 import ProvidersRow from "@/components/episode/ProvidersRow";
@@ -31,7 +31,6 @@ export const metadata: Metadata = buildMetadata({
 export default function HomePage() {
   const all = getAllEpisodes();
   const featured = all[0];
-  const recent = all.slice(1, 5);
 
   return (
     <>
@@ -40,18 +39,18 @@ export default function HomePage() {
       {/* 1 — Content-forward hero: the latest episode, framed by the brand. */}
       <FeaturedEpisode episode={featured} />
 
-      {/* 2 — The library: recent releases grid + curated collections. */}
+      {/* 2 — The immersive episode grid: click a tile to bloom it full-screen. */}
+      <ExploreWall episodes={all} />
+
+      {/* 3 — Curated collections (acquired's playlists). */}
       <section className="paper-grain bg-bone py-sp-9">
-        <RecentReleases episodes={recent} heading="Recent releases" />
-        <div className="mt-sp-9">
-          <Collections />
-        </div>
+        <Collections />
       </section>
 
-      {/* 3 — Browse by topic (acquired's industry tags), contrasting band. */}
+      {/* 4 — Browse by topic (acquired's industry tags), contrasting band. */}
       <TopicRail />
 
-      {/* 4 — What the show is + the hosts. */}
+      {/* 5 — What the show is + the hosts. */}
       <section className="bg-paper py-sp-9" aria-labelledby="show-heading">
         <div className="mx-auto grid max-w-content items-center gap-12 px-5 sm:px-8 md:grid-cols-[1.15fr_0.85fr]">
           <Reveal>
@@ -98,7 +97,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5 — Listener love. */}
+      {/* 6 — Listener love. */}
       <section className="paper-grain bg-bone py-sp-9" aria-labelledby="love-heading">
         <div className="mx-auto mb-8 max-w-wall px-5 sm:px-8">
           <Eyebrow as="div">
@@ -108,7 +107,7 @@ export default function HomePage() {
         <Marquee items={testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)} />
       </section>
 
-      {/* 6 — The Club (brand punch, breaks the light run). */}
+      {/* 7 — The Club. */}
       <BlueWall tone="launch" as="section" className="py-sp-9" aria-labelledby="club-heading">
         <div className="mx-auto max-w-content px-5 sm:px-8">
           <Reveal>
@@ -139,7 +138,7 @@ export default function HomePage() {
         </div>
       </BlueWall>
 
-      {/* 7 — Listen everywhere + email. */}
+      {/* 8 — Listen everywhere + email. */}
       <section className="bg-bone py-sp-9">
         <div className="mx-auto mb-12 max-w-content px-5 sm:px-8">
           <Reveal className="flex flex-col gap-5 border-b border-hairline pb-10 sm:flex-row sm:items-center sm:justify-between">
@@ -152,7 +151,7 @@ export default function HomePage() {
         <EmailSignup />
       </section>
 
-      {/* 8 — Slack close. */}
+      {/* 9 — Slack close. */}
       <div className="pb-sp-8">
         <SlackBlock />
       </div>

@@ -22,7 +22,7 @@ export default function FeaturedEpisode({ episode }: { episode: Episode }) {
 
   return (
     <BlueWall
-      tone={episode.tone}
+      tone="launch"
       as="section"
       className="overflow-hidden pb-sp-9 pt-[104px]"
       vignette={0.5}
