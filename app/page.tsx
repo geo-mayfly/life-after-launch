@@ -8,80 +8,134 @@ export const metadata: Metadata = {
     "Deep dives into how the world's greatest companies were built and why they worked.",
 };
 
-const tiles = [
+type EpisodeTileData = {
+  name: string;
+  mark: string;
+  label: string;
+  portrait?: boolean;
+  style: {
+    background: string;
+    color: string;
+    accent: string;
+  };
+};
+
+const tiles: EpisodeTileData[] = [
   {
-    name: "Hermes",
-    mark: "H",
-    label: "Hermes",
-    style: { background: "#803f00", color: "#f7efe0", accent: "#f5a759" },
+    name: "Visa",
+    mark: "VISA",
+    label: "Visa",
+    style: { background: "#0757f9", color: "#ffffff", accent: "#9fc4ff" },
   },
   {
-    name: "Costco",
-    mark: "COSTCO",
-    label: "Costco",
-    style: { background: "#0a1628", color: "#e5e8ed", accent: "#4d6b8f" },
-  },
-  {
-    name: "Jensen Huang",
-    mark: "JH",
-    label: "Jensen Huang",
-    style: { background: "#173000", color: "#e1eed8", accent: "#7db852" },
-  },
-  {
-    name: "Starbucks",
-    mark: "STAR",
-    label: "Starbucks",
-    style: { background: "#173000", color: "#e1eed8", accent: "#7db852" },
-  },
-  {
-    name: "Vanguard",
-    mark: "V",
-    label: "Vanguard",
-    style: { background: "#550606", color: "#f2e6e0", accent: "#e07878" },
-  },
-  {
-    name: "Disney I",
-    mark: "D",
-    label: "Disney I",
-    style: { background: "#1a1a1a", color: "#eeeeee", accent: "#7a7a7a" },
+    name: "Charlie Munger",
+    mark: "CM",
+    label: "Charlie",
+    portrait: true,
+    style: { background: "#c7b18e", color: "#142033", accent: "#f6eee0" },
   },
   {
     name: "Rolex",
     mark: "ROLEX",
     label: "Rolex",
-    style: { background: "#063514", color: "#e1eed8", accent: "#7db852" },
+    style: { background: "#007241", color: "#f0f7db", accent: "#d8b65a" },
   },
   {
     name: "Ferrari",
     mark: "F",
     label: "Ferrari",
-    style: { background: "#550606", color: "#f2e6e0", accent: "#e07878" },
+    style: { background: "#ef1708", color: "#fff4ed", accent: "#ffd848" },
   },
   {
     name: "Mark Zuckerberg",
     mark: "MZ",
     label: "Mark Zuckerberg",
-    style: { background: "#0c3b3a", color: "#d7f3f1", accent: "#63bfbc" },
+    portrait: true,
+    style: { background: "#043c42", color: "#d7f3f1", accent: "#63bfbc" },
+  },
+  {
+    name: "Microsoft",
+    mark: "MICROSOFT",
+    label: "Microsoft I",
+    style: { background: "#006ccf", color: "#ecf7ff", accent: "#72b5ff" },
+  },
+  {
+    name: "Jamie Dimon",
+    mark: "JD",
+    label: "Jamie Dimon",
+    portrait: true,
+    style: { background: "#b9c8bd", color: "#142033", accent: "#f3efe6" },
+  },
+  {
+    name: "Disney I",
+    mark: "Walt Disney",
+    label: "Disney I",
+    style: { background: "#1a1a1a", color: "#eeeeee", accent: "#9d9d9d" },
+  },
+  {
+    name: "Hermes",
+    mark: "HERMES",
+    label: "Hermes",
+    style: { background: "#ff7900", color: "#1e1308", accent: "#f7efe0" },
+  },
+  {
+    name: "Costco",
+    mark: "COSTCO",
+    label: "Costco",
+    style: { background: "#0478d4", color: "#fff6ed", accent: "#ff4b36" },
   },
   {
     name: "Google Search",
     mark: "G",
     label: "Google Search",
-    style: { background: "#1a1a1a", color: "#eeeeee", accent: "#7a7a7a" },
+    style: { background: "#1b1b1b", color: "#ffffff", accent: "#ffcd38" },
+  },
+  {
+    name: "Trader Joe's",
+    mark: "TRADER JOE'S",
+    label: "Trader Joe's",
+    style: { background: "#e51c14", color: "#fff3ed", accent: "#ffd7b1" },
+  },
+  {
+    name: "Formula 1",
+    mark: "F1",
+    label: "Formula 1",
+    style: { background: "#181818", color: "#ff2b1f", accent: "#ece8e1" },
+  },
+  {
+    name: "Vanguard",
+    mark: "Vanguard",
+    label: "Vanguard",
+    style: { background: "#8b2026", color: "#e9d1d3", accent: "#f2b2b6" },
+  },
+  {
+    name: "Starbucks",
+    mark: "SB",
+    label: "Starbucks",
+    portrait: true,
+    style: { background: "#d9ded1", color: "#173000", accent: "#00704a" },
+  },
+  {
+    name: "Jensen Huang",
+    mark: "JH",
+    label: "Jensen Huang",
+    portrait: true,
+    style: { background: "#203811", color: "#e1eed8", accent: "#7db852" },
   },
   {
     name: "NFL",
     mark: "NFL",
     label: "NFL",
-    style: { background: "#0a1628", color: "#e5e8ed", accent: "#4d6b8f" },
+    style: { background: "#0f4877", color: "#ffffff", accent: "#f02936" },
   },
   {
-    name: "Visa",
-    mark: "VISA",
-    label: "Visa",
-    style: { background: "#16273c", color: "#e0e9f2", accent: "#4f7fe2" },
+    name: "Morris Chang",
+    mark: "MC",
+    label: "Morris Chang",
+    portrait: true,
+    style: { background: "#c4b59f", color: "#2b1e16", accent: "#f7efe0" },
   },
-] as const;
+];
 
 const smallEpisodes = [
   {
@@ -132,13 +186,13 @@ const testimonials = [
   },
 ] as const;
 
-function EpisodeTile({ tile }: { tile: (typeof tiles)[number] }) {
+function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
   const palette = tile.style as CSSProperties & { accent: string };
 
   return (
     <Link
       href="#featured"
-      className="group relative isolate flex min-h-[260px] overflow-hidden rounded-[1.35rem] p-5 text-left shadow-[0_18px_60px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-1"
+      className="acquired-tile group relative isolate flex min-h-0 overflow-hidden rounded-[0.28rem] p-4 text-left shadow-[0_14px_46px_rgba(0,0,0,0.18)] outline-none"
       style={{
         background: palette.background,
         color: palette.color,
@@ -153,16 +207,30 @@ function EpisodeTile({ tile }: { tile: (typeof tiles)[number] }) {
         }}
         aria-hidden
       />
-      <span className="absolute right-4 top-4 z-10 text-[0.62rem] font-black uppercase tracking-[0.18em] opacity-75">
+      <span className="absolute right-3 top-3 z-20 rounded-sm bg-white/10 px-2.5 py-1.5 text-[0.52rem] font-black uppercase tracking-[0.16em] opacity-80 backdrop-blur">
         {tile.label}
       </span>
+      {tile.portrait && (
+        <span className="absolute inset-x-[18%] bottom-0 top-[14%] z-0 rounded-t-full bg-[linear-gradient(180deg,rgba(255,255,255,0.32),rgba(0,0,0,0.28))] opacity-80 shadow-[inset_0_0_80px_rgba(0,0,0,0.35)]" />
+      )}
+      <span className="acquired-vinyl absolute left-1/2 top-1/2 z-30 grid h-[min(72%,13rem)] aspect-square -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[repeating-radial-gradient(circle,#050505_0_7px,#171717_8px_12px,#070707_13px_18px)] opacity-0 shadow-[0_24px_70px_rgba(0,0,0,0.55)]">
+        <span
+          className="grid h-[38%] w-[38%] place-items-center rounded-full text-[0.56rem] font-black uppercase tracking-[0.14em] text-black"
+          style={{ background: palette.accent }}
+        >
+          Play
+        </span>
+      </span>
       <span
-        className="absolute inset-x-5 bottom-5 z-10 translate-y-5 rounded-full px-4 py-3 text-center text-[0.68rem] font-black uppercase tracking-[0.18em] opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100"
+        className="absolute inset-x-1/2 bottom-4 z-40 flex w-max -translate-x-1/2 translate-y-6 items-center gap-2 rounded-full px-5 py-3 text-center text-[0.62rem] font-black uppercase tracking-[0.18em] opacity-0 shadow-[0_18px_46px_rgba(0,0,0,0.22)] transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
         style={{ background: palette.accent, color: "#050505" }}
       >
-        Explore Acquired
+        Play episode
+        <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-[0.55rem] text-white">
+          ▶
+        </span>
       </span>
-      <span className="m-auto max-w-[85%] text-center font-sans text-[clamp(2.5rem,5vw,5.4rem)] font-black uppercase leading-[0.86] tracking-[-0.08em]">
+      <span className="relative z-10 m-auto max-w-[86%] text-center font-sans text-[clamp(2.2rem,4.6vw,5.7rem)] font-black uppercase leading-[0.86] tracking-[-0.08em] transition duration-500 group-hover:scale-[0.86] group-hover:opacity-25 group-focus-visible:scale-[0.86] group-focus-visible:opacity-25">
         {tile.mark}
       </span>
     </Link>
@@ -209,19 +277,25 @@ function PlayButton() {
 export default function HomePage() {
   return (
     <div className="bg-white pt-[74px] text-black">
-      <section className="relative bg-[#f7f7f2] px-4 pb-16 pt-5 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-[1520px] grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {tiles.map((tile) => (
-            <EpisodeTile key={tile.name} tile={tile} />
+      <section className="acquired-tile-wall relative h-[calc(100svh-74px)] min-h-[640px] overflow-hidden bg-[#f7f7f2] px-0 py-0">
+        <div className="acquired-wall-rail grid h-full min-w-[1040px] grid-cols-6 grid-rows-3 gap-4 p-4 sm:p-5">
+          {tiles.map((tile, index) => (
+            <div
+              key={tile.name}
+              className="min-h-0"
+              style={{ "--tile-delay": `${index * 42}ms` } as CSSProperties}
+            >
+              <EpisodeTile tile={tile} />
+            </div>
           ))}
         </div>
 
-        <aside className="mx-auto mt-6 max-w-[1520px] lg:pointer-events-none lg:absolute lg:bottom-8 lg:right-10 lg:mt-0 lg:w-[360px]">
-          <div className="pointer-events-auto rounded-[1.75rem] border border-black/10 bg-white p-5 shadow-[0_22px_80px_rgba(0,0,0,0.22)]">
+        <aside className="pointer-events-none absolute bottom-6 left-1/2 z-30 w-[min(92vw,380px)] -translate-x-1/2 lg:left-auto lg:right-8 lg:translate-x-0">
+          <div className="pointer-events-auto rounded-[1.35rem] border border-black/10 bg-white/94 p-5 shadow-[0_24px_90px_rgba(0,0,0,0.24)] backdrop-blur-xl">
             <p className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-black/45">
               Emails from Ben & David
             </p>
-            <h2 className="mt-3 text-3xl font-black uppercase leading-[0.9] tracking-[-0.06em]">
+            <h2 className="mt-3 text-[clamp(1.45rem,3vw,2rem)] font-black uppercase leading-[0.88] tracking-[-0.06em]">
               Our key takeaways, research photos, and your vote on future topics.
             </h2>
             <form className="mt-5 flex gap-2">
@@ -243,9 +317,14 @@ export default function HomePage() {
             </form>
           </div>
         </aside>
+
+        <div className="absolute bottom-5 left-6 hidden items-center gap-3 text-[0.62rem] font-black uppercase tracking-[0.2em] text-black/45 sm:flex">
+          <span className="h-px w-12 bg-black/25" />
+          Hover a title to play
+        </div>
       </section>
 
-      <section className="bg-white px-5 py-20 sm:px-8 lg:py-28">
+      <section className="acquired-scroll-section bg-white px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto grid max-w-[1380px] items-center gap-12 lg:grid-cols-[1fr_0.86fr]">
           <StudioScene />
           <div>
@@ -269,7 +348,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="featured" className="bg-[#f4f0e9] px-5 py-20 sm:px-8 lg:py-28">
+      <section
+        id="featured"
+        className="acquired-scroll-section bg-[#f4f0e9] px-5 py-20 sm:px-8 lg:py-28"
+      >
         <div className="mx-auto max-w-[1380px]">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1fr]">
             <div id="listen" className="rounded-[2rem] bg-[#1a1a1a] p-6 text-white shadow-2xl">
@@ -349,7 +431,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-white px-5 py-20 sm:px-8 lg:py-28">
+      <section className="acquired-scroll-section bg-white px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1380px]">
           <div className="mb-14 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
@@ -392,7 +474,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#0c3028] px-5 py-20 text-white sm:px-8 lg:py-28">
+      <section className="acquired-scroll-section bg-[#0c3028] px-5 py-20 text-white sm:px-8 lg:py-28">
         <div className="mx-auto grid max-w-[1380px] items-center gap-12 lg:grid-cols-[0.95fr_1fr]">
           <div>
             <p className="text-[0.76rem] font-black uppercase tracking-[0.2em] text-[#00e1c6]">
