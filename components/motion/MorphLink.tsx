@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { MouseEvent, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 
 /**
  * MorphLink — drives the poster→page scene transition (brief §4.4c) via the
@@ -16,11 +16,13 @@ export default function MorphLink({
   children,
   className,
   ariaLabel,
+  style,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
   ariaLabel?: string;
+  style?: CSSProperties;
 }) {
   const router = useRouter();
 
@@ -40,7 +42,13 @@ export default function MorphLink({
   }
 
   return (
-    <Link href={href} className={className} onClick={onClick} aria-label={ariaLabel}>
+    <Link
+      href={href}
+      className={className}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      style={style}
+    >
       {children}
     </Link>
   );

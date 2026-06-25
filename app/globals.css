@@ -318,6 +318,154 @@
   }
 }
 
+/* Acquired replica: full-viewport tile wall with premium hover/player motion. */
+.acquired-tile-wall {
+  background-image:
+    radial-gradient(70% 80% at 50% 4%, rgba(255, 255, 255, 0.9), transparent 64%),
+    linear-gradient(180deg, #f7f7f2 0%, #ecece6 100%);
+}
+.acquired-wall-rail {
+  animation: acquired-wall-rail 18s var(--ease) infinite alternate;
+}
+.acquired-tile {
+  height: 100%;
+  transform: translateY(18px) scale(0.985);
+  opacity: 0;
+  animation: acquired-tile-in 0.72s var(--ease) var(--tile-delay, 0ms) forwards;
+  transition:
+    transform 520ms var(--ease),
+    filter 520ms var(--ease),
+    box-shadow 520ms var(--ease);
+}
+.acquired-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.28), transparent 34%),
+    radial-gradient(60% 80% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.22) 100%);
+  opacity: 0.7;
+  transition: opacity 520ms var(--ease);
+}
+.acquired-tile:hover,
+.acquired-tile:focus-visible {
+  z-index: 20;
+  transform: translateY(-7px) scale(1.018);
+  filter: saturate(1.06) contrast(1.04);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.36);
+}
+.acquired-tile:hover::after,
+.acquired-tile:focus-visible::after {
+  opacity: 0.28;
+}
+.acquired-vinyl {
+  transform: translate(-50%, -50%) scale(0.62) rotate(-18deg);
+  transition:
+    opacity 420ms var(--ease),
+    transform 520ms var(--ease);
+}
+.acquired-tile:hover .acquired-vinyl,
+.acquired-tile:focus-visible .acquired-vinyl {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  animation: acquired-vinyl-spin 7s linear 500ms infinite;
+}
+
+@keyframes acquired-wall-rail {
+  from {
+    transform: translate3d(-0.6%, -0.4%, 0);
+  }
+  to {
+    transform: translate3d(0.6%, 0.4%, 0);
+  }
+}
+@keyframes acquired-tile-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes acquired-vinyl-spin {
+  to {
+    transform: translate(-50%, -50%) scale(1) rotate(360deg);
+  }
+}
+
+.episode-page-hero {
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 52%),
+    linear-gradient(180deg, #0a0f18 0%, #080d15 100%);
+}
+.episode-left-panel {
+  animation: episode-panel-in 0.78s var(--ease) both;
+}
+.episode-copy-panel {
+  animation: episode-copy-in 0.9s var(--ease) 90ms both;
+}
+.episode-transition-card {
+  animation: episode-card-settle 0.9s var(--ease) both;
+}
+.episode-record {
+  animation: episode-record-spin 12s linear infinite;
+}
+
+@keyframes episode-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes episode-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes episode-card-settle {
+  from {
+    filter: blur(8px) saturate(0.8);
+    transform: scale(1.035);
+  }
+  to {
+    filter: none;
+    transform: none;
+  }
+}
+@keyframes episode-record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .acquired-scroll-section {
+    animation: acquired-section-rise both var(--ease);
+    animation-timeline: view();
+    animation-range: entry 0% cover 34%;
+  }
+}
+
+@keyframes acquired-section-rise {
+  from {
+    opacity: 0.72;
+    transform: translateY(42px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -356,6 +504,21 @@
   }
   .skeleton::after {
     display: none;
+  }
+  .acquired-wall-rail,
+  .acquired-tile,
+  .acquired-tile:hover .acquired-vinyl,
+  .acquired-tile:focus-visible .acquired-vinyl,
+  .acquired-scroll-section,
+  .episode-left-panel,
+  .episode-copy-panel,
+  .episode-transition-card,
+  .episode-record {
+    animation: none !important;
+  }
+  .acquired-tile {
+    opacity: 1;
+    transform: none;
   }
   /* Reveals are always shown — never hidden behind motion. */
   [data-reveal],
