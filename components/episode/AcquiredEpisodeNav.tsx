@@ -98,7 +98,8 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
   useEffect(() => {
     const onScroll = () => {
       const hero = document.getElementById("episode-hero");
-      setHeroPast(hero ? hero.getBoundingClientRect().bottom < 150 : false);
+      const heroTop = hero?.getBoundingClientRect().top ?? 0;
+      setHeroPast(window.scrollY > 220 || heroTop < -120);
     };
 
     const observer = new IntersectionObserver(
