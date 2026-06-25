@@ -12,12 +12,25 @@ const SECTIONS = [
 ] as const;
 
 function ListenLinks({ compact = false }: { compact?: boolean }) {
+  if (!compact) {
+    return (
+      <a
+        href="https://www.acquired.fm/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex w-full items-center justify-center rounded-full bg-[#ffb21a] px-4 py-3 text-[0.72rem] font-black uppercase tracking-[0.12em] text-[#172033] shadow-[0_12px_28px_rgba(204,126,0,0.18)] transition hover:bg-[#ffc23d]"
+      >
+        Choose platform
+      </a>
+    );
+  }
+
   const cls = compact
     ? "rounded-full border border-black/10 px-4 py-2 text-[0.66rem]"
     : "rounded-full bg-[#ffb21a] px-4 py-3 text-[0.68rem] shadow-[0_12px_28px_rgba(204,126,0,0.18)]";
 
   return (
-    <div className={compact ? "grid gap-2" : "grid gap-2"}>
+    <div className="grid gap-2">
       {["Spotify", "Apple", "YouTube"].map((platform) => (
         <a
           key={platform}
@@ -26,7 +39,7 @@ function ListenLinks({ compact = false }: { compact?: boolean }) {
           rel="noopener noreferrer"
           className={`${cls} font-black uppercase tracking-[0.12em] text-[#172033] transition hover:bg-[#ffc23d]`}
         >
-          {compact ? platform : `Choose ${platform}`}
+          {platform}
         </a>
       ))}
     </div>
