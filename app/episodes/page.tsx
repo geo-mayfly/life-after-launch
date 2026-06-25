@@ -80,7 +80,7 @@ export default function EpisodesPage() {
             Every Company Has A Story
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-8 text-black/62">
-            Deep dives into how the world's greatest companies were built and why
+            Deep dives into how the world&apos;s greatest companies were built and why
             they worked.
           </p>
         </div>
