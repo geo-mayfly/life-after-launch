@@ -65,9 +65,11 @@ export default function Marquee({
   return (
     <div
       ref={scroller}
-      className="drag-cursor no-scrollbar overflow-x-auto"
+      className="drag-cursor no-scrollbar overflow-x-auto focus-visible:outline-none"
       style={{ scrollbarWidth: "none" }}
-      aria-label="Listener testimonials"
+      role="group"
+      aria-label="Listener testimonials — scroll to browse"
+      tabIndex={0}
     >
       <div className="flex w-max" style={{ gap }}>
         {doubled.map((item, i) => (

@@ -88,7 +88,10 @@ export default function CommunityPage() {
                 key={i}
                 className="flex items-start gap-4 bg-paper p-7"
               >
-                <span className="mt-1 font-display text-h3 text-marigold-deep">
+                <span
+                  aria-hidden
+                  className="mt-1 inline-flex shrink-0 items-center justify-center rounded-md bg-ink-navy px-3 py-1 font-display text-h3 leading-none text-marigold"
+                >
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <p className="text-lead text-ink">{line}</p>

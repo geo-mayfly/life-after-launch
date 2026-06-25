@@ -59,8 +59,10 @@ export default function EpisodeWall({
   if (reduced) {
     return (
       <div
-        className="no-scrollbar overflow-x-auto"
-        aria-label={label}
+        className="no-scrollbar overflow-x-auto focus-visible:outline-none"
+        role="group"
+        aria-label={`${label} — scroll to browse`}
+        tabIndex={0}
         style={{ scrollSnapType: "x mandatory" }}
       >
         <div className="flex px-5 sm:px-8" style={{ gap }}>

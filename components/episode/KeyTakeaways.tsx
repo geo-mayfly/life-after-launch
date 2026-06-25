@@ -49,7 +49,7 @@ export default function KeyTakeaways({ episode }: { episode: Episode }) {
               <div className="flex items-baseline gap-4">
                 <span
                   aria-hidden
-                  className="font-display text-h3 leading-none text-marigold-deep"
+                  className="inline-flex shrink-0 items-center justify-center rounded-md bg-ink-navy px-3 py-1 font-display text-h3 leading-none text-marigold"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
