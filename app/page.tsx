@@ -256,7 +256,7 @@ export default function HomePage() {
               Every Company Has A Story
             </h1>
             <p className="mt-8 max-w-xl text-[clamp(1.25rem,2vw,2rem)] leading-[1.12] text-black/72">
-              Acquired tells the definitive history and strategy of the world's
+              Acquired tells the definitive history and strategy of the world&apos;s
               greatest companies.
             </p>
             <Link
@@ -303,7 +303,7 @@ export default function HomePage() {
               </h2>
               <p className="mt-7 max-w-3xl text-lg leading-8 text-black/72">
                 The Walt Disney Company is the most successful enterprise ever
-                created for monetizing human nostalgia. During Walt's era, Disney
+                created for monetizing human nostalgia. During Walt&apos;s era, Disney
                 operated like an unhinged moonshot factory, betting the company
                 on animation, theme parks, and a modern flywheel business model.
               </p>
@@ -374,7 +374,7 @@ export default function HomePage() {
                 className="rounded-[1.5rem] border border-black/10 bg-[#f7f7f2] p-7"
               >
                 <blockquote className="text-xl leading-8 tracking-[-0.02em]">
-                  "{item.quote}"
+                  &quot;{item.quote}&quot;
                 </blockquote>
                 <figcaption className="mt-8">
                   <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-black text-sm font-black uppercase text-white">
@@ -403,7 +403,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-7 max-w-xl text-xl leading-8 text-white/70">
               Join thousands of curious builders, investors, and operators in the
-              Slack community around the world's greatest company stories.
+              Slack community around the world&apos;s greatest company stories.
             </p>
             <Link
               href="#"
