@@ -60,6 +60,9 @@ export default function ExploreWall({ episodes }: { episodes: Episode[] }) {
             <h2 id="explore-heading" className="mt-3 font-display text-h2 text-on-blue">
               Explore every episode.
             </h2>
+            <p className="mt-2 text-on-blue-soft">
+              Click any cover for a closer look.
+            </p>
           </div>
           <Link href="/episodes" className="spark-link shrink-0 font-semibold text-on-blue">
             All episodes →
@@ -80,7 +83,7 @@ export default function ExploreWall({ episodes }: { episodes: Episode[] }) {
                 onMouseEnter={() => setHovered(e.slug)}
                 onFocus={() => setHovered(e.slug)}
                 onBlur={() => setHovered(null)}
-                className="group relative aspect-[4/5] rounded-md"
+                className="group relative aspect-[4/5] rounded-md focus-visible:outline-offset-4"
                 aria-label={`Preview ${e.episodeTitle} — ${e.hook}`}
                 animate={
                   reduced
@@ -90,12 +93,40 @@ export default function ExploreWall({ episodes }: { episodes: Episode[] }) {
                 transition={{ duration: 0.32, ease }}
                 style={{ zIndex: hovered === e.slug ? 2 : 1 }}
               >
+                {/* A vinyl record peeks out from behind on hover/focus — the cue
+                    that a click blooms the full record + takeover (acquired's move). */}
+                <AnimatePresence>
+                  {!reduced && hovered === e.slug && (
+                    <motion.span
+                      key="peek"
+                      aria-hidden
+                      className="pointer-events-none absolute right-0 top-1/2 z-0"
+                      initial={{ x: "-36%", y: "-50%", opacity: 0 }}
+                      animate={{ x: "30%", y: "-50%", opacity: 1 }}
+                      exit={{ x: "-36%", y: "-50%", opacity: 0 }}
+                      transition={{ duration: 0.4, ease }}
+                    >
+                      <VinylRecord episode={e} size={230} spinning />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+
                 <motion.div
                   layoutId={reduced ? undefined : `explore-${e.slug}`}
-                  className="absolute inset-0 overflow-hidden rounded-md shadow-sm transition-shadow duration-base group-hover:shadow-lg"
+                  className="absolute inset-0 z-10 overflow-hidden rounded-md shadow-sm transition-shadow duration-base group-hover:shadow-lg"
                 >
                   <EpisodeCover episode={e} />
                 </motion.div>
+
+                {/* explicit "open" affordance */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-3 right-3 z-20 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-marigold text-ink-navy opacity-0 shadow-gold transition-[opacity,transform] duration-base group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
               </motion.button>
             );
           })}
@@ -188,11 +219,12 @@ function Takeover({
             </div>
           </motion.div>
 
-          {/* Media: the cover (morphed) + the record sliding out behind it */}
-          <div className="relative order-1 hidden items-center justify-center lg:order-2 lg:flex">
+          {/* Media: the cover (morphed) + the record sliding out behind it
+              (the record is desktop-only; the cover always shows). */}
+          <div className="relative order-1 flex items-center justify-center lg:order-2">
             <motion.div
               aria-hidden
-              className="absolute"
+              className="absolute hidden lg:block"
               initial={reduced ? { opacity: 0 } : { x: -40, opacity: 0, scale: 0.86 }}
               animate={reduced ? { opacity: 1 } : { x: "34%", opacity: 1, scale: 1 }}
               exit={{ opacity: 0, x: 0 }}
@@ -203,11 +235,11 @@ function Takeover({
 
             <motion.div
               layoutId={reduced ? undefined : `explore-${episode.slug}`}
-              className="relative z-10 aspect-[4/5] w-[320px] overflow-hidden rounded-lg shadow-lg"
+              className="relative z-10 aspect-[4/5] w-[240px] overflow-hidden rounded-lg shadow-lg sm:w-[300px] lg:w-[320px]"
             >
               <EpisodeCover episode={episode} caption={false} />
             </motion.div>
-            </div>
+          </div>
           </div>
         </div>
       </BlueWall>
