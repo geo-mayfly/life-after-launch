@@ -188,6 +188,12 @@ const testimonials = [
 
 function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
   const palette = tile.style as CSSProperties & { accent: string };
+  const markSize =
+    tile.mark.length > 8
+      ? "text-[clamp(1.35rem,2.65vw,3.35rem)]"
+      : tile.mark.length > 5
+        ? "text-[clamp(1.7rem,3.2vw,4.05rem)]"
+        : "text-[clamp(2.2rem,4.6vw,5.7rem)]";
 
   return (
     <Link
@@ -230,7 +236,9 @@ function EpisodeTile({ tile }: { tile: EpisodeTileData }) {
           ▶
         </span>
       </span>
-      <span className="relative z-10 m-auto max-w-[86%] text-center font-sans text-[clamp(2.2rem,4.6vw,5.7rem)] font-black uppercase leading-[0.86] tracking-[-0.08em] transition duration-500 group-hover:scale-[0.86] group-hover:opacity-25 group-focus-visible:scale-[0.86] group-focus-visible:opacity-25">
+      <span
+        className={`relative z-10 m-auto max-w-[86%] text-center font-sans ${markSize} font-black uppercase leading-[0.86] tracking-[-0.08em] transition duration-500 group-hover:scale-[0.86] group-hover:opacity-25 group-focus-visible:scale-[0.86] group-focus-visible:opacity-25`}
+      >
         {tile.mark}
       </span>
     </Link>
@@ -289,34 +297,6 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-
-        <aside className="pointer-events-none absolute bottom-6 left-1/2 z-30 w-[min(92vw,380px)] -translate-x-1/2 lg:left-auto lg:right-8 lg:translate-x-0">
-          <div className="pointer-events-auto rounded-[1.35rem] border border-black/10 bg-white/94 p-5 shadow-[0_24px_90px_rgba(0,0,0,0.24)] backdrop-blur-xl">
-            <p className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-black/45">
-              Emails from Ben & David
-            </p>
-            <h2 className="mt-3 text-[clamp(1.45rem,3vw,2rem)] font-black uppercase leading-[0.88] tracking-[-0.06em]">
-              Our key takeaways, research photos, and your vote on future topics.
-            </h2>
-            <form className="mt-5 flex gap-2">
-              <label className="sr-only" htmlFor="hero-email">
-                Email
-              </label>
-              <input
-                id="hero-email"
-                type="email"
-                placeholder="email address"
-                className="h-11 min-w-0 flex-1 rounded-full border border-black/15 px-4 text-sm outline-none focus:border-black/40"
-              />
-              <button
-                type="button"
-                className="h-11 rounded-full bg-black px-4 text-[0.68rem] font-black uppercase tracking-[0.14em] text-white"
-              >
-                Join
-              </button>
-            </form>
-          </div>
-        </aside>
 
         <div className="absolute bottom-5 left-6 hidden items-center gap-3 text-[0.62rem] font-black uppercase tracking-[0.2em] text-black/45 sm:flex">
           <span className="h-px w-12 bg-black/25" />
