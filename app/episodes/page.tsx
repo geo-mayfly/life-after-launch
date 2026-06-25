@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getAllEpisodes, episodeCount } from "@/lib/content";
 import { site } from "@/content/site";
 import { buildMetadata } from "@/lib/seo";
 import { collectionPageSchema, breadcrumbSchema } from "@/lib/schema";
 import JsonLd from "@/components/JsonLd";
+import Skeleton from "@/components/ui/Skeleton";
 import BlueWall from "@/components/brand/BlueWall";
 import Eyebrow from "@/components/ui/Eyebrow";
 import EpisodesExplorer from "@/components/episode/EpisodesExplorer";
@@ -50,7 +52,17 @@ export default function EpisodesPage() {
           </Reveal>
 
           <div className="mt-12">
-            <EpisodesExplorer episodes={episodes} />
+            <Suspense
+              fallback={
+                <div className="grid gap-7 [grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))]">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Skeleton key={i} aspect="4 / 5" />
+                  ))}
+                </div>
+              }
+            >
+              <EpisodesExplorer episodes={episodes} />
+            </Suspense>
           </div>
         </div>
       </BlueWall>

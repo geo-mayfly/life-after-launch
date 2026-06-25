@@ -1,20 +1,23 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { site, memberCountLabel } from "@/content/site";
-import { getLatestEpisodes } from "@/lib/content";
+import { site } from "@/content/site";
+import { getAllEpisodes } from "@/lib/content";
 import { testimonials } from "@/content/testimonials";
 import { podcastSeriesSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import BlueWall from "@/components/brand/BlueWall";
+import GuestPortrait from "@/components/brand/GuestPortrait";
 import Eyebrow from "@/components/ui/Eyebrow";
 import StatCounter from "@/components/ui/StatCounter";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import Marquee from "@/components/motion/Marquee";
 import TestimonialCard from "@/components/layout/TestimonialCard";
-import HomeHero from "@/components/home/HomeHero";
-import EpisodeWall from "@/components/episode/EpisodeWall";
+import FeaturedEpisode from "@/components/home/FeaturedEpisode";
+import RecentReleases from "@/components/episode/RecentReleases";
+import TopicRail from "@/components/episode/TopicRail";
+import ProvidersRow from "@/components/episode/ProvidersRow";
 import EmailSignup from "@/components/layout/EmailSignup";
 import SlackBlock from "@/components/layout/SlackBlock";
 
@@ -25,55 +28,91 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function HomePage() {
-  const latest = getLatestEpisodes(4);
+  const all = getAllEpisodes();
+  const featured = all[0];
+  const recent = all.slice(1, 5);
 
   return (
     <>
       <JsonLd data={podcastSeriesSchema()} />
 
-      <HomeHero />
+      {/* 1 — Content-forward hero: the latest episode, framed by the brand. */}
+      <FeaturedEpisode episode={featured} />
 
-      {/* 2 — Latest episodes: the draggable wall. */}
-      <BlueWall tone="deep" as="section" className="py-sp-9" aria-labelledby="latest-heading">
-        <div className="mx-auto mb-8 flex max-w-wall items-end justify-between px-5 sm:px-8">
-          <Eyebrow on="dark" as="div">
-            <span id="latest-heading">LATEST EPISODES</span>
-          </Eyebrow>
-          <Link href="/episodes" className="spark-link text-on-blue-soft hover:text-on-blue">
-            All episodes →
-          </Link>
+      {/* 2 — The library: recent releases grid + browse by topic. */}
+      <section className="paper-grain bg-bone py-sp-9">
+        <RecentReleases episodes={recent} heading="Recent releases" />
+        <div className="mt-sp-8">
+          <TopicRail />
         </div>
-        <EpisodeWall episodes={latest} label="Latest episodes" itemWidth={300} />
-      </BlueWall>
+      </section>
 
-      {/* 3 — What the show is: Bone band, off-centre, lots of air. */}
-      <section className="paper-grain bg-bone py-sp-9" aria-labelledby="show-heading">
-        <div className="mx-auto grid max-w-content gap-8 px-5 sm:px-8 md:grid-cols-[1.3fr_1fr] md:items-end">
+      {/* 3 — What the show is + the hosts. */}
+      <section className="bg-paper py-sp-9" aria-labelledby="show-heading">
+        <div className="mx-auto grid max-w-content items-center gap-12 px-5 sm:px-8 md:grid-cols-[1.15fr_0.85fr]">
           <Reveal>
+            <Eyebrow>THE SHOW</Eyebrow>
             <h2
               id="show-heading"
-              className="max-w-2xl font-display text-h1 leading-[1.04] text-ink"
+              className="mt-3 max-w-2xl font-display text-h1 leading-[1.04] text-ink"
             >
               A mate telling you the real story over a beer.
             </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="max-w-md text-lead text-ink-2">
+            <p className="mt-5 max-w-md text-lead text-ink-2">
               {site.name} takes you inside the hearts and minds of the Founders
               navigating the start-up world. Interview-led, crafted in post, and
               honest to a fault. We don&rsquo;t sand the rough bits off — that&rsquo;s
               the whole point.
             </p>
+            <Link
+              href="/about"
+              className="spark-link mt-6 inline-block font-semibold text-deep-blue"
+            >
+              More about the show →
+            </Link>
+          </Reveal>
+
+          {/* Hosts mini */}
+          <Reveal delay={0.08}>
+            <p className="eyebrow text-deep-blue">Your hosts</p>
+            <div className="mt-4 grid grid-cols-2 gap-5">
+              {site.hosts.map((host, i) => (
+                <Link key={host.name} href="/about" className="group block">
+                  <GuestPortrait
+                    tone={i % 2 === 0 ? "deep" : "navy"}
+                    withCloud={false}
+                    className="aspect-[4/5] w-full rounded-md transition-transform duration-base group-hover:-translate-y-1"
+                  />
+                  <p className="mt-3 font-display text-h3 leading-tight text-ink">
+                    {host.name}
+                  </p>
+                  <p className="text-small text-ink-3">{host.role}</p>
+                </Link>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* 4 — The Club: blue band with the live counter. */}
+      {/* 4 — Listener love. */}
+      <section className="paper-grain bg-bone py-sp-9" aria-labelledby="love-heading">
+        <div className="mx-auto mb-8 max-w-wall px-5 sm:px-8">
+          <Eyebrow as="div">
+            <span id="love-heading">FROM THE FOUNDERS</span>
+          </Eyebrow>
+        </div>
+        <Marquee items={testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)} />
+      </section>
+
+      {/* 5 — The Club (brand punch, breaks the light run). */}
       <BlueWall tone="launch" as="section" className="py-sp-9" aria-labelledby="club-heading">
         <div className="mx-auto max-w-content px-5 sm:px-8">
           <Reveal>
             <Eyebrow on="dark">THE AUSSIE FOUNDERS CLUB</Eyebrow>
-            <h2 id="club-heading" className="mt-4 max-w-2xl font-display text-h1 leading-[1.04] text-on-blue">
+            <h2
+              id="club-heading"
+              className="mt-4 max-w-2xl font-display text-h1 leading-[1.04] text-on-blue"
+            >
               You&rsquo;re not building alone.
             </h2>
             <p className="mt-6 font-display text-h2 text-on-blue">
@@ -96,23 +135,21 @@ export default function HomePage() {
         </div>
       </BlueWall>
 
-      {/* 5 — Listener love: a pausable, drag-to-browse marquee. */}
-      <section className="bg-bone py-sp-9" aria-labelledby="love-heading">
-        <div className="mx-auto mb-8 max-w-wall px-5 sm:px-8">
-          <Eyebrow as="div">
-            <span id="love-heading">FROM THE FOUNDERS</span>
-          </Eyebrow>
+      {/* 6 — Listen everywhere + email. */}
+      <section className="bg-bone py-sp-9">
+        <div className="mx-auto mb-12 max-w-content px-5 sm:px-8">
+          <Reveal className="flex flex-col gap-5 border-b border-hairline pb-10 sm:flex-row sm:items-center sm:justify-between">
+            <p className="font-display text-h3 text-ink">
+              Available everywhere you listen.
+            </p>
+            <ProvidersRow />
+          </Reveal>
         </div>
-        <Marquee items={testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)} />
-      </section>
-
-      {/* 6 — Email module. */}
-      <section className="bg-bone pb-sp-9">
         <EmailSignup />
       </section>
 
-      {/* 7 — Slack close + footer (footer lives in layout). */}
-      <div className="py-sp-8">
+      {/* 7 — Slack close. */}
+      <div className="pb-sp-8">
         <SlackBlock />
       </div>
     </>

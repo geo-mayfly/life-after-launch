@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Episode } from "@/content/schema";
 import { episodeMatchesTopic } from "@/lib/content";
 import { site } from "@/content/site";
@@ -35,8 +36,17 @@ function matchesQuery(e: Episode, q: string) {
 
 export default function EpisodesExplorer({ episodes }: { episodes: Episode[] }) {
   const reduced = useReducedMotion();
-  const [topic, setTopic] = useState("All");
+  const searchParams = useSearchParams();
+  const paramTopic = searchParams.get("topic");
+  const [topic, setTopic] = useState(
+    paramTopic && CHIPS.includes(paramTopic) ? paramTopic : "All",
+  );
   const [query, setQuery] = useState("");
+
+  // Deep-link support: react to ?topic= changes (e.g. from the home topic rail).
+  useEffect(() => {
+    if (paramTopic && CHIPS.includes(paramTopic)) setTopic(paramTopic);
+  }, [paramTopic]);
 
   const filtered = useMemo(
     () => episodes.filter((e) => episodeMatchesTopic(e, topic) && matchesQuery(e, query)),
