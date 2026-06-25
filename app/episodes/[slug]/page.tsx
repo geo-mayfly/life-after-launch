@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AcquiredEpisodeNav from "@/components/episode/AcquiredEpisodeNav";
@@ -34,18 +34,18 @@ function EpisodeArtwork({ episode, small = false }: { episode: AcquiredEpisode; 
     episode.mark.length > 8
       ? small
         ? "text-[clamp(1.25rem,3vw,3rem)]"
-        : "text-[clamp(2rem,5vw,5.8rem)]"
+        : "text-[clamp(1.75rem,4vw,4.7rem)]"
       : episode.mark.length > 5
         ? small
           ? "text-[clamp(1.6rem,3.4vw,3.8rem)]"
-          : "text-[clamp(2.8rem,6vw,7rem)]"
+          : "text-[clamp(2.3rem,5vw,5.8rem)]"
         : small
           ? "text-[clamp(2rem,4vw,4.8rem)]"
-          : "text-[clamp(4rem,10vw,10rem)]";
+          : "text-[clamp(3.2rem,7vw,7.2rem)]";
 
   return (
     <div
-      className="episode-transition-card relative isolate grid aspect-square place-items-center overflow-hidden rounded-[0.45rem] shadow-[0_30px_110px_rgba(0,0,0,0.45)]"
+      className="episode-transition-card relative isolate grid aspect-square place-items-center overflow-hidden rounded-[1.15rem] shadow-[0_30px_110px_rgba(0,0,0,0.38)]"
       style={
         {
           background: episode.palette.background,
@@ -119,25 +119,32 @@ function TakeawayTiles({ episode }: { episode: AcquiredEpisode }) {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-5">
       {tiles.map((tile, index) => (
         <article
           key={tile.title}
-          className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.22)]"
+          className="grid gap-5 rounded-[1.35rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.18)] md:grid-cols-[0.34fr_1fr]"
         >
-          <p
-            className="text-[0.64rem] font-black uppercase tracking-[0.2em]"
-            style={{ color: episode.palette.accent }}
-          >
-            0{index + 1}
-          </p>
-          <h3 className="mt-4 text-2xl font-black tracking-[-0.05em] text-white">
-            {tile.title}
-          </h3>
-          <blockquote className="mt-5 border-l-2 pl-4 text-xl leading-8 text-white/86" style={{ borderColor: episode.palette.accent }}>
-            “{tile.quote}”
-          </blockquote>
-          <p className="mt-5 leading-7 text-white/62">{tile.body}</p>
+          <div>
+            <p
+              className="text-[0.64rem] font-black uppercase tracking-[0.2em]"
+              style={{ color: episode.palette.accent }}
+            >
+              0{index + 1}
+            </p>
+            <h3 className="mt-4 text-2xl font-black tracking-[-0.05em] text-white">
+              {tile.title}
+            </h3>
+          </div>
+          <div>
+            <blockquote
+              className="border-l-2 pl-4 text-[1.35rem] leading-8 text-white/88"
+              style={{ borderColor: episode.palette.accent }}
+            >
+              “{tile.quote}”
+            </blockquote>
+            <p className="mt-5 leading-7 text-white/62">{tile.body}</p>
+          </div>
         </article>
       ))}
     </div>
@@ -154,13 +161,17 @@ function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
   ];
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+    <div className="grid gap-6">
       <div>
-        <h3 className="text-2xl font-black tracking-[-0.04em]">Chapters</h3>
         <ol className="mt-5 divide-y divide-white/10 rounded-[1.25rem] border border-white/10 bg-white/[0.045]">
           {chapters.map(([time, label]) => (
-            <li key={time} className="flex gap-4 px-5 py-4">
-              <span className="w-20 shrink-0 font-mono text-sm text-white/42">{time}</span>
+            <li key={time} className="grid gap-2 px-5 py-4 sm:grid-cols-[90px_1fr]">
+              <span
+                className="font-mono text-sm font-bold"
+                style={{ color: episode.palette.accent }}
+              >
+                {time}
+              </span>
               <span className="text-white/72">{label}</span>
             </li>
           ))}
@@ -190,6 +201,28 @@ function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
           </ul>
         </div>
       </div>
+    </div>
+  );
+}
+
+function SectionIntro({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="mb-8">
+      <p className="text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/42">
+        {eyebrow}
+      </p>
+      <h2 className="mt-3 max-w-3xl font-display text-[clamp(2.4rem,5vw,5.25rem)] leading-[0.88] tracking-[-0.07em]">
+        {title}
+      </h2>
+      {children && <div className="mt-5 max-w-2xl text-lg leading-8 text-white/60">{children}</div>}
     </div>
   );
 }
@@ -281,21 +314,21 @@ export default async function EpisodePage({
         <AcquiredEpisodeNav episode={episode} />
       </div>
 
-      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 sm:px-8 lg:py-12">
+      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 sm:px-8 lg:py-14">
         <div
           className="absolute inset-0 -z-10 opacity-50"
           style={{
             background: `radial-gradient(circle at 18% 18%, ${episode.palette.accent}55, transparent 32%), radial-gradient(circle at 78% 4%, ${episode.palette.background}88, transparent 34%)`,
           }}
         />
-        <div className="mx-auto grid max-w-[1480px] gap-12 lg:grid-cols-[minmax(280px,0.38fr)_minmax(0,0.62fr)]">
+        <div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[370px_minmax(0,1fr)]">
           <div className="hidden lg:block">
             <AcquiredEpisodeNav episode={episode} />
           </div>
 
           <article className="episode-copy-panel space-y-24">
             <section id="episode-hero" className="scroll-mt-28">
-              <div className="grid items-end gap-8 xl:grid-cols-[1fr_360px]">
+              <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_30px_120px_rgba(0,0,0,0.24)] sm:p-8 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-10">
                 <div>
                   <div className="flex flex-wrap items-center gap-3 text-[0.7rem] font-black uppercase tracking-[0.18em] text-white/42">
                     <Link href="/episodes" className="hover:text-white">
@@ -307,10 +340,18 @@ export default async function EpisodePage({
                   <p className="mt-8 text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/42">
                     {eyebrow}
                   </p>
-                  <h1 className="mt-4 max-w-4xl font-display text-[clamp(4.5rem,11vw,11rem)] leading-[0.76] tracking-[-0.08em]">
+                  <h1 className="mt-4 max-w-4xl font-display text-[clamp(4rem,8vw,7.75rem)] leading-[0.82] tracking-[-0.075em]">
                     {episode.name}
                   </h1>
-                  <p className="mt-6 text-2xl leading-8 text-white/76">{episode.guestLine}</p>
+                  <p
+                    className="mt-5 max-w-3xl font-display text-[clamp(2.1rem,4.2vw,4.5rem)] leading-[0.92] tracking-[-0.06em]"
+                    style={{ color: episode.palette.accent }}
+                  >
+                    {episode.tagline}
+                  </p>
+                  <p className="mt-6 max-w-2xl text-xl leading-8 text-white/68">
+                    {episode.guestLine}
+                  </p>
                   <div className="mt-8">
                     <ListenButtons episode={episode} />
                   </div>
@@ -318,56 +359,58 @@ export default async function EpisodePage({
                     Runtime {episode.duration}
                   </p>
                 </div>
-                <EpisodeArtwork episode={episode} />
+                <div className="mt-8 max-w-[320px] xl:mt-0 xl:self-end">
+                  <EpisodeArtwork episode={episode} />
+                </div>
               </div>
             </section>
 
-            <section id="overview" className="scroll-mt-32">
-              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Overview
-              </p>
-              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
-                {episode.tagline}
-              </h2>
-              <div className="mt-8 max-w-3xl space-y-6 text-xl leading-9 text-white/72">
-                <p className="text-2xl leading-9 text-white/86">{episode.dek}</p>
-                {episode.description.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
+            <section id="overview" className="scroll-mt-32 border-t border-white/10 pt-16">
+              <SectionIntro eyebrow="Overview" title="What this episode explains">
+                A cleaner synthesis up front, followed by the longer editorial read.
+              </SectionIntro>
+              <div className="grid gap-6 xl:grid-cols-[0.72fr_0.28fr]">
+                <article className="rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-7">
+                  <p className="text-2xl leading-9 text-white/88">{episode.dek}</p>
+                  <div className="mt-7 space-y-6 text-lg leading-8 text-white/68">
+                    {episode.description.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                </article>
+                <aside className="rounded-[1.5rem] border border-white/10 bg-black/18 p-6">
+                  <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/36">
+                    Episode lens
+                  </p>
+                  <p className="mt-5 text-2xl leading-8 text-white/82">
+                    “{episode.categories.join(" + ")} is the frame for the story.”
+                  </p>
+                </aside>
               </div>
             </section>
 
-            <section id="key-takeaways" className="scroll-mt-32">
-              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Key Takeaways
-              </p>
-              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
-                Themes worth stealing
-              </h2>
+            <section id="key-takeaways" className="scroll-mt-32 border-t border-white/10 pt-16">
+              <SectionIntro eyebrow="Key Takeaways" title="Themes worth stealing">
+                Article-style notes that make the episode useful after the listen.
+              </SectionIntro>
               <div className="mt-8">
                 <TakeawayTiles episode={episode} />
               </div>
             </section>
 
-            <section id="transcript" className="scroll-mt-32">
-              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Transcript
-              </p>
-              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
-                Chapters, timestamps, and sources
-              </h2>
+            <section id="transcript" className="scroll-mt-32 border-t border-white/10 pt-16">
+              <SectionIntro eyebrow="Transcript" title="Chapters, timestamps, and sources">
+                Scan the episode, then use the sources block at the end.
+              </SectionIntro>
               <div className="mt-8">
                 <TranscriptBlock episode={episode} />
               </div>
             </section>
 
-            <section id="guest-links" className="scroll-mt-32 pb-10">
-              <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
-                Guest & links
-              </p>
-              <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
-                Follow the research trail
-              </h2>
+            <section id="guest-links" className="scroll-mt-32 border-t border-white/10 pb-10 pt-16">
+              <SectionIntro eyebrow="Guest & links" title="Follow the research trail">
+                Hosts, research links, and further reading for the episode.
+              </SectionIntro>
               <div className="mt-8 grid gap-8 lg:grid-cols-2">
                 <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6">
                   <h3 className="text-2xl font-black tracking-[-0.04em]">{episode.guestLine}</h3>

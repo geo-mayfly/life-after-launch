@@ -14,10 +14,10 @@ const SECTIONS = [
 function ListenLinks({ compact = false }: { compact?: boolean }) {
   const cls = compact
     ? "rounded-full border border-white/10 px-4 py-2 text-[0.66rem]"
-    : "rounded-2xl border border-white/10 px-5 py-4 text-[0.72rem]";
+    : "rounded-full border border-white/10 px-3 py-2.5 text-[0.64rem]";
 
   return (
-    <div className="grid gap-2">
+    <div className={compact ? "grid gap-2" : "grid grid-cols-3 gap-2"}>
       {["Spotify", "Apple", "YouTube"].map((platform) => (
         <a
           key={platform}
@@ -35,9 +35,11 @@ function ListenLinks({ compact = false }: { compact?: boolean }) {
 
 function JumpLinks({
   active,
+  accent,
   onClick,
 }: {
   active: string;
+  accent: string;
   onClick?: () => void;
 }) {
   return (
@@ -47,11 +49,12 @@ function JumpLinks({
           key={section.id}
           href={`#${section.id}`}
           onClick={onClick}
-          className={`rounded-full px-4 py-2 text-[0.68rem] font-black uppercase tracking-[0.16em] transition ${
+          className={`relative rounded-2xl px-4 py-3 text-[0.68rem] font-black uppercase tracking-[0.14em] transition ${
             active === section.id
-              ? "bg-white text-[#080d15]"
+              ? "bg-white/[0.11] text-white"
               : "border border-white/10 text-white/54 hover:bg-white/[0.08] hover:text-white"
           }`}
+          style={active === section.id ? { boxShadow: `inset 3px 0 0 ${accent}` } : undefined}
         >
           {section.label}
         </a>
@@ -131,7 +134,7 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
   return (
     <>
       <aside className="hidden lg:block">
-        <div className="sticky top-[98px] max-h-[calc(100svh-122px)] overflow-y-auto pr-2">
+        <div className="sticky top-[98px] max-h-[calc(100svh-122px)] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur">
           <Link
             href="/episodes"
             className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-white/46 transition hover:text-white"
@@ -141,23 +144,25 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
 
           <div
             className={`mt-7 overflow-hidden transition-all duration-500 ${
-              heroPast ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+              heroPast ? "max-h-[190px] opacity-100" : "max-h-0 opacity-0"
             }`}
           >
-            <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-4">
+            <div className="grid grid-cols-[76px_1fr] gap-4 rounded-[1.25rem] border border-white/10 bg-black/18 p-3">
               <div
-                className="grid aspect-square w-24 place-items-center rounded-md text-xl font-black"
+                className="grid aspect-square w-[76px] place-items-center rounded-md text-lg font-black"
                 style={{ background: episode.palette.background, color: episode.palette.color }}
               >
                 {episode.mark.slice(0, 2)}
               </div>
-              <p className="mt-4 text-[0.64rem] font-black uppercase tracking-[0.16em] text-white/38">
-                {eyebrow}
-              </p>
-              <p className="mt-2 font-display text-3xl leading-none tracking-[-0.06em] text-white">
-                {episode.name}
-              </p>
-              <p className="mt-2 text-sm text-white/48">{episode.duration}</p>
+              <div className="min-w-0 self-center">
+                <p className="text-[0.58rem] font-black uppercase tracking-[0.14em] text-white/38">
+                  {eyebrow}
+                </p>
+                <p className="mt-1 truncate font-display text-2xl leading-none tracking-[-0.05em] text-white">
+                  {episode.name}
+                </p>
+                <p className="mt-1 text-sm text-white/48">{episode.duration}</p>
+              </div>
             </div>
           </div>
 
@@ -175,7 +180,7 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
               On this page
             </h2>
             <div className="mt-3">
-              <JumpLinks active={active} />
+              <JumpLinks active={active} accent={episode.palette.accent} />
             </div>
           </section>
 
@@ -217,7 +222,11 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
               </button>
             </div>
             <div className="mt-5">
-              <JumpLinks active={active} onClick={() => setOpen(false)} />
+              <JumpLinks
+                active={active}
+                accent={episode.palette.accent}
+                onClick={() => setOpen(false)}
+              />
             </div>
             <div className="mt-6 border-t border-white/10 pt-5">
               <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
