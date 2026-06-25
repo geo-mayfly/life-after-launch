@@ -45,7 +45,7 @@ function EpisodeArtwork({ episode, small = false }: { episode: AcquiredEpisode; 
 
   return (
     <div
-      className="episode-transition-card relative isolate grid aspect-square place-items-center overflow-hidden rounded-[1.15rem] shadow-[0_30px_110px_rgba(0,0,0,0.38)]"
+      className="episode-transition-card relative isolate grid aspect-square place-items-center overflow-hidden rounded-lg shadow-[0_30px_80px_rgba(41,51,67,0.18)]"
       style={
         {
           background: episode.palette.background,
@@ -62,7 +62,7 @@ function EpisodeArtwork({ episode, small = false }: { episode: AcquiredEpisode; 
           backgroundSize: "14px 14px",
         }}
       />
-      <span className="absolute right-4 top-4 rounded-sm bg-white/10 px-3 py-2 text-[0.58rem] font-black uppercase tracking-[0.18em] opacity-80 backdrop-blur">
+      <span className="absolute right-4 top-4 rounded-sm bg-white/20 px-3 py-2 text-[0.58rem] font-black uppercase tracking-[0.18em] opacity-80 backdrop-blur">
         {episode.label}
       </span>
       {episode.portrait && (
@@ -84,7 +84,7 @@ function ListenButtons({ episode }: { episode: AcquiredEpisode }) {
           href="https://www.acquired.fm/"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full border border-white/12 bg-white/[0.055] px-5 py-3 text-[0.68rem] font-black uppercase tracking-[0.16em] text-white/72 transition hover:bg-white hover:text-[#080d15]"
+          className="rounded-full border border-[#172033]/10 bg-[#ffb21a] px-5 py-3 text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#172033] shadow-[0_12px_26px_rgba(204,126,0,0.18)] transition hover:bg-[#ffc23d]"
           style={{ borderColor: `${episode.palette.accent}33` }}
         >
           {platform}
@@ -119,31 +119,48 @@ function TakeawayTiles({ episode }: { episode: AcquiredEpisode }) {
   ];
 
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-10">
       {tiles.map((tile, index) => (
         <article
           key={tile.title}
-          className="grid gap-5 rounded-[1.35rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.18)] md:grid-cols-[0.34fr_1fr]"
+          className="border-t border-[#d9cfbf] pt-8"
         >
           <div>
             <p
-            className="text-[0.64rem] font-black uppercase tracking-[0.2em] opacity-70"
+              className="text-[0.7rem] font-bold uppercase tracking-[0.18em] opacity-80"
               style={{ color: episode.palette.accent }}
             >
               0{index + 1}
             </p>
-            <h3 className="mt-4 text-2xl font-black tracking-[-0.05em] text-white">
+            <h3 className="mt-4 max-w-2xl font-display text-[clamp(2rem,4vw,3.2rem)] leading-[0.98] tracking-[-0.045em] text-[#172033]">
               {tile.title}
             </h3>
           </div>
           <div>
             <blockquote
-              className="border-l-2 pl-4 text-[1.35rem] leading-8 text-white/88"
+              className="mt-5 border-l-2 pl-4 font-display text-[1.6rem] leading-8 tracking-[-0.035em] text-[#d99000]"
               style={{ borderColor: episode.palette.accent }}
             >
               “{tile.quote}”
             </blockquote>
-            <p className="mt-5 leading-7 text-white/62">{tile.body}</p>
+            <div className="mt-5 space-y-5 text-[1.04rem] leading-8 text-[#4e5360]">
+              <p>{tile.body}</p>
+              <p>
+                The useful lesson is not the headline outcome. It is the operating
+                behavior underneath it: who made the call, what tradeoff became
+                unavoidable, and which constraint turned into leverage.
+              </p>
+            </div>
+            {index === 0 && (
+              <div className="mt-6 border-l-2 border-[#ffb21a] bg-[#ebe3d3] px-5 py-4">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#d99000]">
+                  TL;DR
+                </p>
+                <p className="mt-2 font-semibold text-[#172033]">
+                  The strongest companies turn pressure into clearer priorities.
+                </p>
+              </div>
+            )}
           </div>
         </article>
       ))}
@@ -163,7 +180,7 @@ function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
   return (
     <div className="grid gap-6">
       <div>
-        <ol className="mt-5 divide-y divide-white/10 rounded-[1.25rem] border border-white/10 bg-white/[0.045]">
+        <ol className="mt-5 divide-y divide-[#d9cfbf] border-y border-[#d9cfbf]">
           {chapters.map(([time, label]) => (
             <li key={time} className="grid gap-2 px-5 py-4 sm:grid-cols-[90px_1fr]">
               <span
@@ -172,14 +189,14 @@ function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
               >
                 {time}
               </span>
-              <span className="text-white/72">{label}</span>
+              <span className="text-[#333948]">{label}</span>
             </li>
           ))}
         </ol>
       </div>
-      <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-6">
-        <h3 className="text-2xl font-black tracking-[-0.04em]">Transcript excerpt</h3>
-        <div className="mt-5 space-y-5 leading-8 text-white/68">
+      <div className="rounded-xl border border-[#d9cfbf] bg-[#f1eadf] p-6">
+        <h3 className="text-xl font-bold tracking-[-0.03em] text-[#172033]">Read full transcript</h3>
+        <div className="mt-5 space-y-5 leading-8 text-[#4e5360]">
           <p>
             This is where the long-form transcript begins: the narrative setup,
             the research trail, and the strategic question that makes {episode.name}
@@ -190,11 +207,11 @@ function TranscriptBlock({ episode }: { episode: AcquiredEpisode }) {
             where references support the story without interrupting the listening flow.
           </p>
         </div>
-        <div className="mt-6 rounded-xl bg-black/24 p-4">
-          <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
+        <div className="mt-8 border-t border-[#d9cfbf] pt-6">
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#253047]/42">
             Sources
           </p>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-white/62">
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-[#4e5360]">
             {episode.links.map((link) => (
               <li key={link}>{link}</li>
             ))}
@@ -216,13 +233,13 @@ function SectionIntro({
 }) {
   return (
     <div className="mb-8">
-      <p className="text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/42">
+      <p className="border-y border-[#d9cfbf] py-3 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#d99000]">
         {eyebrow}
       </p>
-      <h2 className="mt-3 max-w-3xl font-display text-[clamp(2.4rem,5vw,5.25rem)] leading-[0.88] tracking-[-0.07em]">
+      <h2 className="mt-7 max-w-3xl font-display text-[clamp(2.35rem,4.6vw,4.4rem)] leading-[0.96] tracking-[-0.055em] text-[#172033]">
         {title}
       </h2>
-      {children && <div className="mt-5 max-w-2xl text-lg leading-8 text-white/60">{children}</div>}
+      {children && <div className="mt-5 max-w-2xl text-[1.04rem] leading-8 text-[#4e5360]">{children}</div>}
     </div>
   );
 }
@@ -231,29 +248,29 @@ function RelatedCard({ episode }: { episode: AcquiredEpisode }) {
   return (
     <Link href={`/episodes/${episode.slug}`} className="group block">
       <EpisodeArtwork episode={episode} small />
-      <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-white/42">
+      <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-[#253047]/42">
         {episode.season}
       </p>
-      <h3 className="mt-1 text-3xl font-black tracking-[-0.05em] text-white transition group-hover:text-white/70">
+      <h3 className="mt-1 text-3xl font-black tracking-[-0.05em] text-[#172033] transition group-hover:text-[#172033]/70">
         {episode.name}
       </h3>
-      <p className="mt-2 text-white/54">{episode.tagline}</p>
+      <p className="mt-2 text-[#4e5360]">{episode.tagline}</p>
     </Link>
   );
 }
 
 function EmailClubClose() {
   return (
-    <section className="bg-[#081f1a] px-5 py-16 text-white sm:px-8 lg:py-24">
+    <section className="bg-[#f7f0e4] px-5 py-16 text-[#172033] sm:px-8 lg:py-24">
       <div className="mx-auto grid max-w-[1380px] gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-7 sm:p-10">
-          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#00e1c6]">
+        <div className="rounded-[1.6rem] border border-[#d9cfbf] bg-[#eee6d8] p-7 sm:p-10">
+          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#d99000]">
             Emails from Ben & David
           </p>
           <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
             Never miss an episode
           </h2>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-white/68">
+          <p className="mt-5 max-w-xl text-lg leading-8 text-[#4e5360]">
             Get takeaways, research photos, hints at the next episode, and your
             vote on future topics.
           </p>
@@ -265,29 +282,29 @@ function EmailClubClose() {
               id="episode-email"
               type="email"
               placeholder="email address"
-              className="h-14 flex-1 rounded-full border border-white/15 bg-white px-5 text-black outline-none placeholder:text-black/45 focus:border-[#00e1c6]"
+              className="h-14 flex-1 rounded-full border border-[#d9cfbf] bg-white px-5 text-black outline-none placeholder:text-black/45 focus:border-[#ffb21a]"
             />
             <button
               type="button"
-              className="h-14 rounded-full bg-[#00e1c6] px-7 text-[0.78rem] font-black uppercase tracking-[0.16em] text-black transition hover:bg-white"
+              className="h-14 rounded-full bg-[#ffb21a] px-7 text-[0.78rem] font-black uppercase tracking-[0.16em] text-[#172033] transition hover:bg-[#ffc23d]"
             >
               Subscribe
             </button>
           </form>
         </div>
-        <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-7 sm:p-10">
-          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#00e1c6]">
+        <div className="rounded-[1.6rem] border border-[#d9cfbf] bg-[#eee6d8] p-7 sm:p-10">
+          <p className="text-[0.72rem] font-black uppercase tracking-[0.22em] text-[#d99000]">
             Community
           </p>
           <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
             The conversation keeps going.
           </h2>
-          <p className="mt-5 text-lg leading-8 text-white/68">
+          <p className="mt-5 text-lg leading-8 text-[#4e5360]">
             Join the Slack community around the world&apos;s greatest company stories.
           </p>
           <Link
             href="#"
-            className="mt-8 inline-flex rounded-full bg-[#00e1c6] px-7 py-4 text-[0.74rem] font-black uppercase tracking-[0.18em] text-black transition hover:bg-white"
+            className="mt-8 inline-flex rounded-full bg-[#ffb21a] px-7 py-4 text-[0.74rem] font-black uppercase tracking-[0.18em] text-[#172033] transition hover:bg-[#ffc23d]"
           >
             Join Slack
           </Link>
@@ -310,89 +327,73 @@ export default async function EpisodePage({
 
   return (
     <main
-      className="min-h-screen pt-[74px] text-white"
+      className="min-h-screen pt-[74px] text-[#172033]"
       style={{
-        backgroundColor: "#080d15",
-        backgroundImage: `linear-gradient(115deg, rgba(0,0,0,0.34) 0%, rgba(8,13,21,0.82) 58%, rgba(8,13,21,0.96) 100%), radial-gradient(85% 58% at 16% 0%, ${episode.palette.background} 0%, transparent 62%)`,
+        backgroundColor: "#f7f0e4",
+        backgroundImage: `radial-gradient(70% 44% at 72% 0%, ${episode.palette.background}22 0%, transparent 62%)`,
       }}
     >
       <div className="lg:hidden">
         <AcquiredEpisodeNav episode={episode} />
       </div>
 
-      <section className="episode-page-hero relative isolate overflow-hidden px-5 py-8 pb-28 sm:px-8 lg:py-14">
-        <div
-          className="absolute inset-0 -z-10 opacity-50"
-          style={{
-            background: `radial-gradient(circle at 18% 18%, ${episode.palette.accent}55, transparent 32%), radial-gradient(circle at 78% 4%, ${episode.palette.background}88, transparent 34%)`,
-          }}
-        />
-        <div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[370px_minmax(0,1fr)]">
+      <section className="relative isolate overflow-hidden px-5 py-8 pb-28 sm:px-8 lg:py-14">
+        <div className="mx-auto grid max-w-[1180px] gap-16 lg:grid-cols-[230px_minmax(0,640px)] xl:grid-cols-[250px_minmax(0,660px)]">
           <div className="hidden lg:block">
             <AcquiredEpisodeNav episode={episode} />
           </div>
 
           <article className="episode-copy-panel space-y-24">
             <section id="episode-hero" className="scroll-mt-28">
-              <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_30px_120px_rgba(0,0,0,0.24)] sm:p-8 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-10">
+              <div>
+                <div className="mx-auto mb-9 max-w-[330px]">
+                  <EpisodeArtwork episode={episode} />
+                </div>
                 <div>
-                  <div className="flex flex-wrap items-center gap-3 text-[0.7rem] font-black uppercase tracking-[0.18em] text-white/42">
-                    <Link href="/episodes" className="hover:text-white">
-                      Episodes
+                  <div className="flex flex-wrap items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.18em] text-[#253047]/42">
+                    <Link href="/episodes" className="hover:text-[#172033]">
+                      Home
                     </Link>
                     <span>/</span>
-                    <span>{episode.label}</span>
+                    <span>Episodes</span>
                   </div>
-                  <p className="mt-8 text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/42">
+                  <p className="mt-8 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#d99000]">
                     {eyebrow}
                   </p>
-                  <h1 className="mt-4 max-w-4xl font-display text-[clamp(4rem,8vw,7.75rem)] leading-[0.82] tracking-[-0.075em]">
+                  <h1 className="mt-5 max-w-3xl font-display text-[clamp(3.4rem,7vw,6.2rem)] leading-[0.93] tracking-[-0.06em]">
                     {episode.name}
                   </h1>
-                  <p className="mt-5 max-w-3xl font-display text-[clamp(2.1rem,4.2vw,4.5rem)] leading-[0.92] tracking-[-0.06em] text-white/82">
+                  <p className="mt-7 max-w-2xl font-display text-[clamp(2rem,4vw,3.3rem)] leading-[0.98] tracking-[-0.05em] text-[#172033]">
                     {episode.tagline}
                   </p>
-                  <p className="mt-6 max-w-2xl text-xl leading-8 text-white/68">
+                  <p className="mt-6 max-w-2xl text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-[#253047]/54">
                     {episode.guestLine}
                   </p>
                   <div className="mt-8">
                     <ListenButtons episode={episode} />
                   </div>
-                  <p className="mt-5 text-sm font-black uppercase tracking-[0.18em] text-white/42">
+                  <p className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-[#253047]/42">
                     Runtime {episode.duration}
                   </p>
-                </div>
-                <div className="mt-8 max-w-[320px] xl:mt-0 xl:self-end">
-                  <EpisodeArtwork episode={episode} />
                 </div>
               </div>
             </section>
 
-            <section id="overview" className="scroll-mt-32 border-t border-white/10 pt-16">
-              <SectionIntro eyebrow="Overview" title="What this episode explains">
-                A cleaner synthesis up front, followed by the longer editorial read.
-              </SectionIntro>
-              <div className="grid gap-6 xl:grid-cols-[0.72fr_0.28fr]">
-                <article className="rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-7">
-                  <p className="text-2xl leading-9 text-white/88">{episode.dek}</p>
-                  <div className="mt-7 space-y-6 text-lg leading-8 text-white/68">
+            <section id="overview" className="scroll-mt-32 pt-4">
+              <SectionIntro eyebrow="Overview" title={episode.tagline} />
+              <div>
+                <article>
+                  <p className="text-[1.35rem] leading-9 text-[#323847]">{episode.dek}</p>
+                  <div className="mt-7 space-y-6 text-[1.05rem] leading-8 text-[#4e5360]">
                     {episode.description.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
                     ))}
                   </div>
                 </article>
-                <aside className="rounded-[1.5rem] border border-white/10 bg-black/18 p-6">
-                  <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/36">
-                    Episode lens
-                  </p>
-                  <p className="mt-5 text-2xl leading-8 text-white/82">
-                    “{episode.categories.join(" + ")} is the frame for the story.”
-                  </p>
-                </aside>
               </div>
             </section>
 
-            <section id="key-takeaways" className="scroll-mt-32 border-t border-white/10 pt-16">
+            <section id="key-takeaways" className="scroll-mt-32 border-t border-[#d9cfbf] pt-16">
               <SectionIntro eyebrow="Key Takeaways" title="Themes worth stealing">
                 Article-style notes that make the episode useful after the listen.
               </SectionIntro>
@@ -401,7 +402,7 @@ export default async function EpisodePage({
               </div>
             </section>
 
-            <section id="transcript" className="scroll-mt-32 border-t border-white/10 pt-16">
+            <section id="transcript" className="scroll-mt-32 border-t border-[#d9cfbf] pt-16">
               <SectionIntro eyebrow="Transcript" title="Chapters, timestamps, and sources">
                 Scan the episode, then use the sources block at the end.
               </SectionIntro>
@@ -410,24 +411,24 @@ export default async function EpisodePage({
               </div>
             </section>
 
-            <section id="guest-links" className="scroll-mt-32 border-t border-white/10 pb-10 pt-16">
+            <section id="guest-links" className="scroll-mt-32 border-t border-[#d9cfbf] pb-10 pt-16">
               <SectionIntro eyebrow="Guest & links" title="Follow the research trail">
                 Hosts, research links, and further reading for the episode.
               </SectionIntro>
               <div className="mt-8 grid gap-8 lg:grid-cols-2">
-                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6">
-                  <h3 className="text-2xl font-black tracking-[-0.04em]">{episode.guestLine}</h3>
-                  <p className="mt-4 leading-7 text-white/62">
+                <div className="rounded-xl border border-[#d9cfbf] bg-[#eee6d8] p-6">
+                  <h3 className="text-2xl font-black tracking-[-0.04em] text-[#172033]">{episode.guestLine}</h3>
+                  <p className="mt-4 leading-7 text-[#4e5360]">
                     Hosted by the Acquired team, with research focused on {episode.name}
                     and the company-building lessons behind the episode.
                   </p>
                 </div>
-                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-6">
-                  <h3 className="text-2xl font-black tracking-[-0.04em]">Links</h3>
+                <div className="rounded-xl border border-[#d9cfbf] bg-[#eee6d8] p-6">
+                  <h3 className="text-2xl font-black tracking-[-0.04em] text-[#172033]">Links</h3>
                   <ul className="mt-5 space-y-3">
                     {episode.links.map((link) => (
                       <li key={link}>
-                        <Link href="#" className="text-white/72 transition hover:text-white">
+                        <Link href="#" className="text-[#4e5360] underline decoration-[#d99000]/35 underline-offset-4 transition hover:text-[#172033]">
                           {link} →
                         </Link>
                       </li>
@@ -440,12 +441,12 @@ export default async function EpisodePage({
         </div>
       </section>
 
-      <section className="border-t border-white/10 bg-[#0b111d] px-5 py-16 sm:px-8 lg:py-24">
+      <section className="border-t border-[#d9cfbf] bg-[#f7f0e4] px-5 py-16 sm:px-8 lg:py-24">
         <div className="mx-auto max-w-[1480px]">
-          <p className="text-[0.74rem] font-black uppercase tracking-[0.2em] text-white/42">
+          <p className="text-[0.74rem] font-bold uppercase tracking-[0.2em] text-[#d99000]">
             More from the series
           </p>
-          <h2 className="mt-4 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.82] tracking-[-0.08em]">
+          <h2 className="mt-4 font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-[-0.06em] text-[#172033]">
             Related episodes
           </h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">

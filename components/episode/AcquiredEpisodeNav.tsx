@@ -13,20 +13,20 @@ const SECTIONS = [
 
 function ListenLinks({ compact = false }: { compact?: boolean }) {
   const cls = compact
-    ? "rounded-full border border-white/10 px-4 py-2 text-[0.66rem]"
-    : "rounded-full border border-white/10 px-3 py-2.5 text-[0.64rem]";
+    ? "rounded-full border border-black/10 px-4 py-2 text-[0.66rem]"
+    : "rounded-full bg-[#ffb21a] px-4 py-3 text-[0.68rem] shadow-[0_12px_28px_rgba(204,126,0,0.18)]";
 
   return (
-    <div className={compact ? "grid gap-2" : "grid grid-cols-3 gap-2"}>
+    <div className={compact ? "grid gap-2" : "grid gap-2"}>
       {["Spotify", "Apple", "YouTube"].map((platform) => (
         <a
           key={platform}
           href={`https://www.acquired.fm/`}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${cls} font-black uppercase tracking-[0.16em] text-white/72 transition hover:border-white/28 hover:bg-white/[0.08] hover:text-white`}
+          className={`${cls} font-black uppercase tracking-[0.12em] text-[#172033] transition hover:bg-[#ffc23d]`}
         >
-          {platform}
+          {compact ? platform : `Choose ${platform}`}
         </a>
       ))}
     </div>
@@ -49,12 +49,12 @@ function JumpLinks({
           key={section.id}
           href={`#${section.id}`}
           onClick={onClick}
-          className={`relative rounded-2xl px-4 py-3 text-[0.68rem] font-black uppercase tracking-[0.14em] transition ${
+          className={`relative border-l px-4 py-2.5 text-[0.78rem] font-semibold transition ${
             active === section.id
-              ? "bg-white/[0.11] text-white"
-              : "border border-white/10 text-white/54 hover:bg-white/[0.08] hover:text-white"
+              ? "text-[#f2a000]"
+              : "border-black/10 text-[#253047]/62 hover:text-[#172033]"
           }`}
-          style={active === section.id ? { boxShadow: `inset 3px 0 0 ${accent}` } : undefined}
+          style={{ borderColor: active === section.id ? accent : "rgba(23,32,51,0.12)" }}
         >
           {section.label}
         </a>
@@ -81,9 +81,9 @@ function ShareButton({ episode }: { episode: AcquiredEpisode }) {
     <button
       type="button"
       onClick={share}
-      className="rounded-full border border-white/10 px-4 py-2 text-left text-[0.68rem] font-black uppercase tracking-[0.16em] text-white/62 transition hover:bg-white/[0.08] hover:text-white"
+      className="rounded-full text-left text-[0.74rem] font-semibold text-[#253047]/62 transition hover:text-[#172033]"
     >
-      {copied ? "Copied" : "Copy link"}
+      {copied ? "Copied" : "Share episode"}
     </button>
   );
 }
@@ -134,40 +134,40 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
   return (
     <>
       <aside className="hidden lg:block">
-        <div className="sticky top-[98px] max-h-[calc(100svh-122px)] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur">
+        <div className="sticky top-[104px] max-h-[calc(100svh-128px)] overflow-y-auto pr-5 text-[#172033]">
           <Link
             href="/episodes"
-            className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-white/46 transition hover:text-white"
+            className="text-[0.76rem] font-semibold text-[#253047]/58 transition hover:text-[#172033]"
           >
             ← All Episodes
           </Link>
 
           <div
             className={`mt-7 overflow-hidden transition-all duration-500 ${
-              heroPast ? "max-h-[190px] opacity-100" : "max-h-0 opacity-0"
+              heroPast ? "max-h-[120px] opacity-100" : "max-h-0 opacity-0"
             }`}
           >
-            <div className="grid grid-cols-[76px_1fr] gap-4 rounded-[1.25rem] border border-white/10 bg-black/18 p-3">
+            <div className="grid grid-cols-[64px_1fr] gap-3 pt-6">
               <div
-                className="grid aspect-square w-[76px] place-items-center rounded-md text-lg font-black"
+                className="grid aspect-square w-16 place-items-center rounded-sm text-lg font-black shadow-[0_10px_28px_rgba(20,30,50,0.14)]"
                 style={{ background: episode.palette.background, color: episode.palette.color }}
               >
                 {episode.mark.slice(0, 2)}
               </div>
               <div className="min-w-0 self-center">
-                <p className="text-[0.58rem] font-black uppercase tracking-[0.14em] text-white/38">
+                <p className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#253047]/42">
                   {eyebrow}
                 </p>
-                <p className="mt-1 truncate font-display text-2xl leading-none tracking-[-0.05em] text-white">
+                <p className="mt-1 truncate font-display text-[1.05rem] font-semibold leading-tight tracking-[-0.03em] text-[#172033]">
                   {episode.name}
                 </p>
-                <p className="mt-1 text-sm text-white/48">{episode.duration}</p>
+                <p className="mt-1 text-xs text-[#253047]/50">{episode.duration}</p>
               </div>
             </div>
           </div>
 
           <section className="mt-8">
-            <h2 className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
+            <h2 className="text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#253047]/42">
               Listen
             </h2>
             <div className="mt-3">
@@ -176,7 +176,7 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
           </section>
 
           <section className="mt-8">
-            <h2 className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
+            <h2 className="text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#253047]/42">
               On this page
             </h2>
             <div className="mt-3">
@@ -185,9 +185,6 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
           </section>
 
           <section className="mt-8">
-            <h2 className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
-              Share
-            </h2>
             <div className="mt-3">
               <ShareButton episode={episode} />
             </div>
@@ -195,33 +192,33 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
         </div>
       </aside>
 
-      <div className="fixed inset-x-3 bottom-4 z-50 rounded-full border border-white/12 bg-[#0b111d]/92 p-2 shadow-[0_18px_70px_rgba(0,0,0,0.45)] backdrop-blur lg:hidden">
+      <div className="fixed inset-x-3 bottom-4 z-50 rounded-full border border-black/10 bg-[#f7f0e4]/95 p-2 shadow-[0_18px_70px_rgba(45,32,12,0.18)] backdrop-blur lg:hidden">
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex w-full items-center justify-between rounded-full px-4 py-3 text-[0.72rem] font-black uppercase tracking-[0.16em] text-white"
+          className="flex w-full items-center justify-between rounded-full px-4 py-3 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[#172033]"
         >
           On this page
-          <span className="text-white/46">{SECTIONS.find((s) => s.id === active)?.label}</span>
+          <span className="text-[#253047]/50">{SECTIONS.find((s) => s.id === active)?.label}</span>
         </button>
       </div>
 
       {open && (
         <div
-          className="fixed inset-0 z-[70] bg-black/72 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-[70] bg-black/45 backdrop-blur-sm lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Episode navigation"
         >
-          <div className="absolute inset-x-3 bottom-[86px] max-h-[72vh] overflow-y-auto rounded-[1.4rem] border border-white/12 bg-[#0d1420] p-5 text-white shadow-2xl">
+          <div className="absolute inset-x-3 bottom-[86px] max-h-[72vh] overflow-y-auto rounded-[1.4rem] border border-black/10 bg-[#f7f0e4] p-5 text-[#172033] shadow-2xl">
             <div className="flex items-center justify-between">
-              <p className="text-[0.72rem] font-black uppercase tracking-[0.2em] text-white/45">
+              <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#253047]/45">
                 On this page
               </p>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-full border border-white/10 px-3 py-1 text-sm text-white/70"
+                className="rounded-full border border-black/10 px-3 py-1 text-sm text-[#253047]/70"
               >
                 Close
               </button>
@@ -233,8 +230,8 @@ export default function AcquiredEpisodeNav({ episode }: { episode: AcquiredEpiso
                 onClick={() => setOpen(false)}
               />
             </div>
-            <div className="mt-6 border-t border-white/10 pt-5">
-              <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/38">
+            <div className="mt-6 border-t border-black/10 pt-5">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#253047]/42">
                 Listen
               </p>
               <div className="mt-3">
